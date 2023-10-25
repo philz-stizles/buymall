@@ -3,10 +3,8 @@ import {
   createContext,
   useCallback,
   useContext,
-  useEffect,
   useState,
-} from "react";
-import { useLocation } from "react-router-dom";
+} from 'react';
 
 const ModalContext = createContext({
   isShowing: false,
