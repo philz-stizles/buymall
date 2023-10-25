@@ -1,0 +1,35 @@
+{
+  "users": [
+    "CREATE",
+    "READ",
+    "READ_OWN",
+    "UPDATE",
+    "UPDATE_OWN",
+    "REMOVE",
+    "REMOVE_OWN",
+    "WRITE"
+  ],
+  "company": ["READ", "REMOVE"],
+  "talent": [
+    "CREATE",
+    "READ",
+    "READ_OWN",
+    "UPDATE",
+    "UPDATE_OWN",
+    "REMOVE",
+    "REMOVE_OWN",
+    "WRITE",
+    "WRITE_OWN"
+  ],
+  "quiz": [
+    "CREATE",
+    "READ",
+    "READ_OWN",
+    "UPDATE",
+    "UPDATE_OWN",
+    "REMOVE",
+    "REMOVE_OWN",
+    "WRITE",
+    "WRITE_OWN"
+  ]
+}

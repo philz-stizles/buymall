@@ -1,0 +1,37 @@
+version: '3.7'
+services:
+  # nginx
+  #   restart: always
+  #   networking:
+  #   depends_on:
+  api
+    container_name: buyemall-api
+    restart: always
+    build:
+      dockerfile: Dockerfile # The name of the docker config file
+      context: .
+    volumes:
+      # - /app/node_modules
+      - .:/app
+    # ports:
+    #   - '30502:3000'
+    links:
+      - mongo
+      - redis
+    environment:
+      - REDIS_DB_URI=redis
+      - REDIS_DB_PORT=6379
+      - MONGO_DB_URI=mongodb://mongo:27017/buyemall-api-prod-db
+      - JWT_AUTH_SECRET=nh7dd4456vhbgkjvdDWQZXMKOY6FDEAmkbZMOPI
+  mongo:
+    container_name: buyemall-mongo-db
+    image: mongo
+    restart: always
+    volumes:
+      - ./data/db:/data/db
+    ports:
+      - '27017:27017'
+  redis:
+    container_name: buyemall-redis-db
+    image: redis
+    restart: always
