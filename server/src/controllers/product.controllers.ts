@@ -11,7 +11,10 @@ import { ProductService } from '@src/services';
 import { ApiResponse, catchAsync } from '@src/utils/api.utils';
 
 export const create = catchAsync(async (req: Request, res: Response) => {
-  const newProduct = await ProductService.create(req.body);
+  const newProduct = await ProductService.create({
+    ...req.body,
+    vendor: req.vendor,
+  });
   res.json(new ApiResponse('Created successfully', newProduct));
 });
 
@@ -27,7 +30,7 @@ export const createWithCsv = async (
 
     const products: any = [];
     // eslint-disable-next-line no-underscore-dangle
-    const path = '' // `${global.__basedir}/resources/static/assets/uploads/${req.file.filename}`;
+    const path = ''; // `${global.__basedir}/resources/static/assets/uploads/${req.file.filename}`;
 
     fs.createReadStream(path)
       .pipe(csv.parse({ headers: true }))
@@ -194,27 +197,23 @@ export const update = catchAsync(
 // };
 
 // WITH PAGINATION
-export const list = async (req: Request, res: Response): Promise<void> => {
+export const list = catchAsync(async (req: Request, res: Response) => {
   // console.table(req.body);
-  try {
-    // createdAt/updatedAt, desc/asc, 3
-    const { sort, order, page } = req.body;
-    const currentPage = page || 1;
-    const perPage = 3; // 3
+  // createdAt/updatedAt, desc/asc, 3
+  const { sort, order, page } = req.body;
+  const currentPage = page || 1;
+  const perPage = 3; // 3
 
-    const products = await Product.find({})
-      .skip((currentPage - 1) * perPage)
-      .populate('category')
-      .populate('subs')
-      .sort([[sort, order]])
-      .limit(perPage)
-      .exec();
+  const products = await Product.find({})
+    .skip((currentPage - 1) * perPage)
+    .populate('category')
+    .populate('subs')
+    .sort([[sort, order]])
+    .limit(perPage)
+    .exec();
 
-    res.json(products);
-  } catch (err: any) {
-    console.log(err);
-  }
-};
+  res.json(products);
+});
 
 export const getProductsTotal = async (
   _req: Request,
@@ -270,10 +269,7 @@ export const setProductRating = async (
   return res.json(ratingUpdated);
 };
 
-export const listRelatedProducts = async (
-  req: Request,
-  res: Response
-): Promise<Response> => {
+export const listRelatedProducts = async (req: Request, res: Response) => {
   const targetProduct = await Product.findById(req.params.productId).exec();
   if (!targetProduct) {
     return res.status(404);
@@ -294,8 +290,7 @@ export const listRelatedProducts = async (
   return res.json(relatedProducts);
 };
 
-// SERACH / FILTER
-
+// SEARCH / FILTER
 const handleQuery = async (req: Request, res: Response, query: string) => {
   const products = await Product.find({ $text: { $search: query } })
     .populate('category', '_id name')

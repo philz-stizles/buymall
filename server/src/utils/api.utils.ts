@@ -1,8 +1,6 @@
-import { IUserDocument } from "@src/models/user.model";
-import { TokenService } from "@src/services";
-import { Request, Response, NextFunction } from "express";
-
-
+import { IUserDocument } from '@src/models/user.model';
+import { TokenService } from '@src/services';
+import { Request, Response, NextFunction } from 'express';
 
 export enum httpStatus {
   CREATED = 201,
@@ -92,6 +90,17 @@ export class APIQuery {
   }
 }
 
+export const filterRequestBody = (body: any, ...allowedFields: string[]): any => {
+  const newBody: any = {};
+  Object.keys(body).forEach(item => {
+    if (allowedFields.includes(item)) {
+      newBody[item] = body[item];
+    }
+  });
+
+  return newBody;
+};
+
 export const createAndSendToken = (
   user: IUserDocument,
   statusCode: number,
@@ -133,7 +142,12 @@ export const createAndSendTokenWithCookie = (
   res.cookie('token', token, cookieOptions);
 
   const retrievedUser = { ...user.toJSON(), password: undefined };
-  res
-    .status(statusCode)
-    .json({ status: true, data: { user: retrievedUser, token }, message });
+  res.status(statusCode).json({
+    status: true,
+    data: {
+      user: retrievedUser,
+      tokens: { access: { token }, refresh: { token } },
+    },
+    message,
+  });
 };

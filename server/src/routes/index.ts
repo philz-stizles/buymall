@@ -3,6 +3,7 @@ import express from 'express';
 import authRoutes from './v1/auth.routes';
 import userRoutes from './v1/user.routes';
 import vendorRoutes from './v1/vendor.routes';
+import productRoutes from './v1/product.routes';
 import categoryRoutes from './v1/category.routes';
 import subCategoryRoutes from './v1/sub-category.routes';
 import couponRoutes from './v1/coupon.routes';
@@ -13,8 +14,11 @@ import config from '@src/config';
 const router = express.Router();
 
 router.use('/auth', authRoutes);
+router.use('/users', userRoutes);
 router.use('/categories', categoryRoutes);
 router.use('/sub-categories', subCategoryRoutes);
+router.use('/vendors', vendorRoutes);
+router.use('/products', productRoutes);
 router.use('/coupons', couponRoutes);
 
 // API documentation.

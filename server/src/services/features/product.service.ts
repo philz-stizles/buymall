@@ -18,7 +18,7 @@ const create = async (data: IProduct): Promise<IProductDocument> => {
     throw new BadRequestError('Product already exists');
   }
 
-  return await Product.create({ ...data, vendor: null });
+  return await Product.create(data);
 };
 
 const findBySlug = async (

@@ -26,6 +26,7 @@ export interface IProduct {
   sold: number;
   images: IFileUpload[];
   shipping: boolean;
+  inStock: boolean;
   color: string[];
   brand: string;
   ratings: IUserRating[];
@@ -73,6 +74,7 @@ const schema = new Schema<IProductDocument, IProductModel>(
     sold: { type: Number, default: 0 },
     images: [{ id: String, url: String }],
     shipping: { type: Boolean, required: true, default: false },
+    inStock: { type: Boolean, required: true, default: false },
     color: [
       {
         type: String,

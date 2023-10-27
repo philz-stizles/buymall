@@ -2,12 +2,9 @@
 import { MongoDataSource } from 'apollo-datasource-mongodb';
 import { Query, Types } from 'mongoose';
 import { ICategoryDocument } from '@src/models/category.model';
-import { IContext } from '@src/graphql/context';
+import { Category } from '@src/models';
 
-export default class Categories extends MongoDataSource<
-  ICategoryDocument,
-  IContext
-> {
+export class Categories extends MongoDataSource<ICategoryDocument> {
   getCategory(
     id: Types.ObjectId
   ): Promise<ICategoryDocument | null | undefined> {
@@ -18,3 +15,5 @@ export default class Categories extends MongoDataSource<
     return this.model.find();
   }
 }
+
+export default new Categories({ modelOrCollection: Category });

@@ -1,0 +1,40 @@
+.placeholder {
+   background-color: #fff;
+   width: 25rem;
+   height: 15rem;
+   border-radius: 5px;
+   padding: 1.2rem;
+}
+
+
+.placeholder__skeleton {
+   background-image: linear-gradient(90deg, #ccc 0px, rgba(229, 229, 229, 0.9) 40px, #ccc 80px);
+   background-size: 300%;
+   /* background-position: 100% 0; */
+   background-position: -100% 0;
+   border-radius: inherit;
+   animation: shimmer 1.5s infinite;
+}
+
+.placeholder__title {
+   height: 15px;
+   margin-bottom: 15px
+}
+
+.placeholder__description {
+  height: 100px;
+}
+
+:global {
+    .shimmer {
+        & :local {
+          animation: shimmer 1.5s infinite;
+        }
+    }
+}
+
+@keyframes shimmer {
+  to {
+    background-position: -100% 0;
+  }
+}

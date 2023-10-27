@@ -38,7 +38,7 @@ export interface ISignupResponse {
 
 export interface ILoggedInUser {
   _id: string;
-  fullname: string;
+  fullName?: string;
   email: string;
   token: string;
 }

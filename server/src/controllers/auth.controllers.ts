@@ -9,7 +9,12 @@ import { createAndSendTokenWithCookie } from '../utils/api.utils';
 import * as awsService from '@src/services/aws/ses.services';
 import { IJWTokenPayload } from '@src/interfaces/JsonWebToken';
 import { User } from '@src/models';
-import { AuthService, TokenService, UserService, VendorService } from '@src/services';
+import {
+  AuthService,
+  TokenService,
+  UserService,
+  VendorService,
+} from '@src/services';
 import { catchAsync } from '@src/utils/api.utils';
 
 type SignupWithEmailVerificationBody = {
@@ -192,13 +197,23 @@ const signIn = catchAsync(
 
     const existingUser = await AuthService.signIn(email, password);
 
-    return createAndSendTokenWithCookie(
-      existingUser,
-      200,
-      req,
-      res,
-      'Login successful'
-    );
+    // Generate user token.
+    const tokens = await TokenService.generateTokens({ id: existingUser._id});
+
+    // Success response.
+    res.json({
+      status: true,
+      data: { user: existingUser, tokens },
+      message: 'Sign in successful',
+    });
+
+    // return createAndSendTokenWithCookie(
+    //   existingUser,
+    //   200,
+    //   req,
+    //   res,
+    //   'Login successful'
+    // );
   }
 );
 

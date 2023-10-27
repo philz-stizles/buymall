@@ -4,7 +4,7 @@ import { IVendorDocument } from '@src/models/vendor.model';
 declare global {
   namespace Express {
     interface Request {
-      user: IUserDocument | (IUserDocument & { vendor: string });
+      user: IUserDocument;
       vendor?: IVendorDocument | null;
       file: any;
     }

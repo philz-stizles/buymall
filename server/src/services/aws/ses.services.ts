@@ -1,78 +1,81 @@
-import AWS, { SES, AWSError } from 'aws-sdk';
-import { PromiseResult } from 'aws-sdk/lib/request';
+import * as AWS from '@aws-sdk/client-ses';
 
-AWS.config.update({
-  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-  region: process.env.AWS_REGION,
-});
-
-const ses = new AWS.SES({ apiVersion: '2010-12-01' }); // apiVersion
-
-export const sendAccountActivationMail = (
+export const sendAccountActivationMail = async (
   email: string,
   token: string
-): Promise<PromiseResult<SES.SendEmailResponse, AWSError>> => {
-  const params: SES.SendEmailRequest = {
-    Source: process.env.ADMIN_EMAIL as string,
-    Destination: {
-      ToAddresses: [email],
-    },
-    ReplyToAddresses: [process.env.ADMIN_EMAIL as string],
-    Message: {
-      Body: {
-        Html: {
-          Charset: 'UTF-8',
-          Data: `
+): Promise<AWS.SendEmailCommandOutput | undefined> => {
+  try {
+    const params: AWS.SendEmailCommandInput = {
+      Source: process.env.ADMIN_EMAIL as string,
+      Destination: {
+        ToAddresses: [email],
+      },
+      ReplyToAddresses: [process.env.ADMIN_EMAIL as string],
+      Message: {
+        Body: {
+          Html: {
+            Charset: 'UTF-8',
+            Data: `
                         <html>
                             <h1>Verify your email address</h1>
                             <p>Please use the following link to complete your registration:</p>
                             <p>${process.env.CLIENT_URL}/auth/activate/${token}</p>
                         </html>
                     `,
+          },
+        },
+        Subject: {
+          Charset: 'UTF-8',
+          Data: 'Complete your registration',
         },
       },
-      Subject: {
-        Charset: 'UTF-8',
-        Data: 'Complete your registration',
-      },
-    },
-  };
-
-  return ses.sendEmail(params).promise();
+    };
+    const ses = new AWS.SESClient({ region: 'Your AWS region' });
+    const command = new AWS.SendEmailCommand(params);
+    const sesResult = await ses.send(command);
+    return sesResult;
+  } catch (error) {
+    console.error(error);
+  }
 };
 
-export const sendPasswordResetMail = (
+export const sendPasswordResetMail = async (
   email: string,
   token: string
-): Promise<PromiseResult<SES.SendEmailResponse, AWSError>> => {
-  const params: SES.SendEmailRequest = {
-    Source: process.env.ADMIN_EMAIL as string,
-    Destination: {
-      ToAddresses: [email],
-    },
-    ReplyToAddresses: [process.env.ADMIN_EMAIL as string],
-    Message: {
-      Body: {
-        Html: {
-          Charset: 'UTF-8',
-          Data: `
+): Promise<AWS.SendEmailCommandOutput | undefined> => {
+  try {
+    const params: AWS.SendEmailCommandInput = {
+      Source: process.env.ADMIN_EMAIL as string,
+      Destination: {
+        ToAddresses: [email],
+      },
+      ReplyToAddresses: [process.env.ADMIN_EMAIL as string],
+      Message: {
+        Body: {
+          Html: {
+            Charset: 'UTF-8',
+            Data: `
                         <html>
                             <h1>Reset your password</h1>
                             <p>Please use the following link to reset your password:</p>
                             <p>${process.env.CLIENT_URL}/auth/password/reset/${token}</p>
                         </html>
                     `,
+          },
+        },
+        Subject: {
+          Charset: 'UTF-8',
+          Data: 'Password reset link',
         },
       },
-      Subject: {
-        Charset: 'UTF-8',
-        Data: 'Password reset link',
-      },
-    },
-  };
-
-  return ses.sendEmail(params).promise();
+    };
+    const ses = new AWS.SESClient({ region: 'Your AWS region' });
+    const command = new AWS.SendEmailCommand(params);
+    const sesResult = await ses.send(command);
+    return sesResult;
+  } catch (error) {
+    console.error(error);
+  }
 };
 
 // export const sendCategorySubscriptionMail = (email: string, data: any) => {

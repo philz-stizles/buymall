@@ -1,9 +1,10 @@
+ 
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { NextFunction, Request, Response } from 'express';
 import { Model } from 'mongoose';
 import AppError from '@src/errors/app.error';
-import { APIFeatures } from '@src/utils/api.utils';
+import { APIQuery } from '@src/utils/api.utils';
 
 export const createOne =
   (
@@ -65,7 +66,7 @@ export const getAll =
     next: NextFunction
   ): Promise<void | Response> => {
     try {
-      const features = new APIFeatures(Entity.find(), req.query)
+      const features = new APIQuery(Entity.find(), req.query)
         .filter()
         .sort()
         .limitFields()

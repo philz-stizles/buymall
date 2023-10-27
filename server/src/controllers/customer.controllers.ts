@@ -1,65 +1,54 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { NextFunction, Request, Response } from 'express';
 import _ from 'lodash';
-import User from '../models/user.model';
-import {
-  filterRequestBody,
-  createAndSendTokenWithCookie,
-} from '../utils/api.utils';
+import User, { IUserDocument } from '../models/user.model';
+import { catchAsync, createAndSendTokenWithCookie, filterRequestBody } from '../utils/api.utils';
 import AppError from '../errors/app.error';
-import { generateToken } from '../utils/auth.utils';
 import * as factory from '../factories/handler.factory';
 import Order, { OrderDocument } from '../models/order.model';
+import { TokenService } from '@src/services';
 
-export const createUser = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-): Promise<void | Response> => {
+export const createUser = catchAsync(async (req: Request, res: Response) => {
   const { name, email, password, confirmPassword } = req.body;
 
-  try {
-    const newUser = await User.create({
-      name,
-      email,
-      password,
-      confirmPassword,
-    });
+  const newUser = await User.create({
+    name,
+    email,
+    password,
+    confirmPassword,
+  });
 
-    const token = generateToken(newUser);
+  const token = TokenService.generate(newUser);
 
-    return res.status(201).json({
-      status: true,
-      data: {
-        user: _.omit(newUser, 'password'), // newUser.toJSON()
-        token,
-      },
-      message: 'created successfully',
-    });
-  } catch (error: any) {
-    return next(error);
-  }
-};
+  return res.status(201).json({
+    status: true,
+    data: {
+      user: _.omit(newUser, 'password'), // newUser.toJSON()
+      token,
+    },
+    message: 'created successfully',
+  });
+});
 
-export const createOrUpdate = async (
+export const createOrUpdate = catchAsync(async (
   req: Request,
   res: Response
-): Promise<any> => {
+)  => {
   if (req.user) {
     return res.json(null);
   }
-  const { name, avatar, email } = req.user;
-  console.log(name, avatar, email);
-  try {
-    const user = await User.findOneAndUpdate(
+  const { fullName, avatar, email } = req.user as IUserDocument;
+  console.log(fullName, avatar, email);
+ 
+    const existingUser = await User.findOneAndUpdate(
       { email },
       { name, avatar },
       { new: true }
     );
 
-    if (user) {
-      console.log('USER UPDATED', user);
-      res.json(user);
+    if (existingUser) {
+      console.log('USER UPDATE user');
+      res.json(existingUser);
     } else {
       const newUser = await new User({
         email,
@@ -69,10 +58,8 @@ export const createOrUpdate = async (
       console.log('USER CREATED', newUser);
       res.json(newUser);
     }
-  } catch (error: any) {
-    console.log(error.message);
-  }
-};
+  
+});
 
 export const updateMe = async (
   req: Request,

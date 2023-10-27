@@ -1,9 +1,3 @@
-// import { IResolvers } from '@graphql-tools/utils';
-import {
-  GraphQLUpload,
-  graphqlUploadExpress, // A Koa implementation is also exported.
-} from 'graphql-upload';
-import { finished } from 'stream/promises';
 import {
   authMutations,
   authQueries,
@@ -23,7 +17,7 @@ import {
 const resolvers = {
   // This maps the `Upload` scalar to the implementation provided
   // by the `graphql-upload` package.
-  Upload: GraphQLUpload,
+  // Upload: GraphQLUpload,
   Query: {
     ...authQueries,
     ...categoryQueries,

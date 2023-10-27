@@ -6,7 +6,7 @@ import seedData from '@src/db/seeder';
 import config from '@src/config';
 import logger from '@src/config/logger';
 // import initSocketIO from './socket';
-// import initGraphQL from './graphql';
+import initGraphQL from './graphql';
 
 const startUp = async (expressApp: Express) => {
   // Connect to database.
@@ -20,7 +20,7 @@ const startUp = async (expressApp: Express) => {
   // unlike with express where the server was implicitly create for us
 
   // Initialize GraphQL
-  // initGraphQL(expressApp, httpServer);
+  initGraphQL(expressApp, httpServer);
 
   // // Initialize Socket.io
   // initSocketIO(httpServer);

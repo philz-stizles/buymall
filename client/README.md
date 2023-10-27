@@ -15,48 +15,53 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 ### Create React App
 
+    ```bash
     npx create-react-app . --template typescript
+    ```
 
+    ```bash
     npm create vite@latest
+    ```
 
 ### Eslint
 
+    ```bash
     npm i --save-dev @typescript-eslint/eslint-plugin @typescript-eslint/parser eslint
-
     npx eslint --init
+    ```
 
 ### Prettier
 
+    ```bash
     npm i --save-dev prettier eslint-config-prettier eslint-plugin-prettier
+    ```
 
 ### Sass
 
 ### Styling using Tailwindcss
 
-- Install:
+    - Install:
 
-   ```bash
-   npm i -D tailwindcss
-   npx tailwindcss init
-   ```
+        ```bash
+        npm install -D tailwindcss postcss autoprefixer
+        npx tailwindcss init -p
+        ```
 
-- Add the following property to "tailwindcss.config":
+    - Add the following property to "tailwindcss.config":
 
-    ```js
-    module.exports = {
-        content: [
-            "./src/**/*.{js,jsx,ts,tsx}",
-        ],
-    }
-    ```
+        ```js
+        module.exports = {
+            content: ['./src/**/*.{js,jsx,ts,tsx}'],
+        };
+        ```
 
 - Add the following code to "index.css":
 
-   ```css
-   @tailwind base;
-   @tailwind components;
-   @tailwind utilities;
-   ```
+  ```css
+  @tailwind base;
+  @tailwind components;
+  @tailwind utilities;
+  ```
 
 ### React Transition Group
 
@@ -66,7 +71,7 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 ### Animation Alternatives
 
     npm i react-motion
-    
+
     npm i react-move
 
     npm i react-router-transition
@@ -85,11 +90,11 @@ Running Tests:
 
 ### Redux using the Redux Toolkit
 
-   Why you might want to replace Redux: You might want to stay within the react domain or ship less code by avoiding the additional library dependencies
+Why you might want to replace Redux: You might want to stay within the react domain or ship less code by avoiding the additional library dependencies
 
-   Why not to use Context API instead of Redux: The Context API is great for low frequency updates but not high frequency update.
-   All components that are consuming a particular context will re-render when any one property in the context changes
-   including components that are not consuming that one property that was updated.
+Why not to use Context API instead of Redux: The Context API is great for low frequency updates but not high frequency update.
+All components that are consuming a particular context will re-render when any one property in the context changes
+including components that are not consuming that one property that was updated.
 
     Low frequency updates: Authentication state, Theme(e.g. Theme mode(light/dark))
     High frequency updates: products management(favorite products etc), shopping cart management etc.

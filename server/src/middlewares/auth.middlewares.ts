@@ -15,7 +15,7 @@ export const authenticate = catchAsync(
       req.headers.authorization &&
       req.headers.authorization.startsWith('Bearer')
     ) {
-      console.log('HEADERS', req.headers);
+      // console.log('HEADERS', req.headers);
       token = req.headers.authorization.split(' ')[1];
     } else if (req.cookies.token) {
       // eslint-disable-next-line prefer-destructuring
@@ -30,7 +30,7 @@ export const authenticate = catchAsync(
     const decodedToken = TokenService.verify(token) as IJWTokenPayload;
     if (!decodedToken)
       return next(new AppError('You are not authorized. Please log', 401));
-    console.log('TOKEN', decodedToken);
+    // console.log('TOKEN', decodedToken);
     // Check if user exists(or if a previously existing user with a valid token has been deleted)
     // and return user if true
     const existingUser = (await User.findById(decodedToken.id).populate(

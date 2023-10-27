@@ -1,17 +1,15 @@
+import { TokenService } from '@src/services';
 /* eslint-disable new-cap */
 import { MongoDataSource } from 'apollo-datasource-mongodb';
 import { ApolloError } from 'apollo-server-express';
-import { Types } from 'mongoose';
-import { IContext } from '@src/graphql/context';
 import User, { IUserDocument } from '@src/models/user.model';
 import {
   ILoggedInUser,
   ILoginCredentials,
   ISignupCredentials,
 } from '@src/graphql/interfaces';
-import { generateToken } from '@src/utils/auth.utils';
 
-export class Users extends MongoDataSource<IUserDocument, IContext> {
+export class Users extends MongoDataSource<IUserDocument> {
   async getUser(id: string): Promise<IUserDocument | null | undefined> {
     return await this.model.findById(id);
   }
@@ -42,12 +40,12 @@ export class Users extends MongoDataSource<IUserDocument, IContext> {
     }
 
     // Generate tokens
-    const { _id, fullname, email, roles } = existingUser;
-    const token = generateToken({ _id, email, roles });
+    const { _id, fullName, email, roles } = existingUser;
+    const token = TokenService.generate({ _id, email, roles });
 
     return {
       _id,
-      fullname,
+      fullName,
       email,
       token,
     };
@@ -61,4 +59,4 @@ export class Users extends MongoDataSource<IUserDocument, IContext> {
   // }
 }
 
-export default new Users(User);
+export default new Users({ modelOrCollection: User });

@@ -4,9 +4,9 @@ import fs from 'fs';
 import { finished } from 'stream/promises';
 import { PubSub } from 'graphql-subscriptions';
 import { IProductDocument } from '@src/models/product.model';
-import { AuthenticationError } from 'apollo-server-express';
 import { IResponse, IUpload } from '../interfaces';
 import * as cloudinary from '@src/services/cloudinary/cloudinary.services';
+import { AuthenticationError } from 'apollo-server-express';
 
 const pubsub = new PubSub();
 

@@ -6,10 +6,10 @@ import CouponStore, {
 import ProductStore, {
   Products,
 } from '@src/graphql/data-sources/mongodb/Products';
-import Categories from '@src/graphql/data-sources/mongodb/Categories';
-import Carts from '@src/graphql/data-sources/mongodb/Carts';
-import Category from '@src/models/category.model';
-import Cart from '@src/models/cart.model';
+import CartStore, { Carts } from '@src/graphql/data-sources/mongodb/Carts';
+import CategoryStore, {
+  Categories,
+} from '@src/graphql/data-sources/mongodb/Categories';
 
 type MongoDataSources = {
   users: Users;
@@ -25,8 +25,8 @@ export default (): MongoDataSources => {
 
   return {
     users: UserStore,
-    carts: new Carts(Cart),
-    categories: new Categories(Category),
+    carts: CartStore,
+    categories: CategoryStore,
     coupons: CouponStore,
     products: ProductStore,
     // users: new Users(client.db().collection('users')),

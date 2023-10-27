@@ -1,11 +1,10 @@
 /* eslint-disable new-cap */
 import { MongoDataSource } from 'apollo-datasource-mongodb';
 import { ApolloError } from 'apollo-server-express';
-import { IContext } from '@src/graphql/context';
 import Coupon, { ICouponDocument } from '@src/models/coupon.model';
 import { ICouponCreate, ICouponUpdate } from '@src/graphql/interfaces';
 
-export class Coupons extends MongoDataSource<ICouponDocument, IContext> {
+export class Coupons extends MongoDataSource<ICouponDocument> {
   async getById(id: string): Promise<ICouponDocument | null | undefined> {
     return await this.model.findById(id);
   }
@@ -47,4 +46,4 @@ export class Coupons extends MongoDataSource<ICouponDocument, IContext> {
   }
 }
 
-export default new Coupons(Coupon);
+export default new Coupons({ modelOrCollection: Coupon });

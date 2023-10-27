@@ -1,21 +1,25 @@
-import AWS from '../index';
+import {
+  DynamoDBClient,
+  PutItemCommand,
+  PutItemCommandInput,
+} from '@aws-sdk/client-dynamodb';
 
-const dynamodb = new AWS.DynamoDB();
+export const createTable = async (params: PutItemCommandInput) => {
+  try {
+    const client = new DynamoDBClient({ region: 'us-west-2' });
 
-export const createTable = (params: AWS.DynamoDB.CreateTableInput): void => {
-  dynamodb.createTable(params, function (err, data) {
-    if (err) {
-      console.error(
-        'Unable to create table. Error JSON:',
-        JSON.stringify(err, null, 2)
-      );
-    } else {
-      console.log(
-        'Created table. Table description JSON:',
-        JSON.stringify(data, null, 2)
-      );
-    }
-  });
+    const data = await client.send(new PutItemCommand(params));
+
+    console.log(
+      'Created table. Table description JSON:',
+      JSON.stringify(data, null, 2)
+    );
+  } catch (error) {
+    console.error(
+      'Unable to create table. Error JSON:',
+      JSON.stringify(error, null, 2)
+    );
+  }
 };
 
 export const init = (): void => {

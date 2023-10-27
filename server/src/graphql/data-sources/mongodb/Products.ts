@@ -1,14 +1,13 @@
 /* eslint-disable new-cap */
 import { MongoDataSource } from 'apollo-datasource-mongodb';
 import { ApolloError } from 'apollo-server-express';
-import { IContext } from '@src/graphql/context';
 import Product, { IProductDocument } from '@src/models/product.model';
 import {
   IProductCreate,
   IProductUpdate,
 } from '@src/graphql/resolvers/product.resolvers';
 
-export class Products extends MongoDataSource<IProductDocument, IContext> {
+export class Products extends MongoDataSource<IProductDocument> {
   async getById(id: string): Promise<IProductDocument | null | undefined> {
     return await this.model.findById(id);
   }
@@ -72,4 +71,4 @@ export class Products extends MongoDataSource<IProductDocument, IContext> {
   }
 }
 
-export default new Products(Product);
+export default new Products({ modelOrCollection: Product });

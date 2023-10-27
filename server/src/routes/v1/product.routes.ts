@@ -15,13 +15,19 @@ import {
   createWithCsv,
   listWithCsv,
 } from '@src/controllers/product.controllers';
-import { authenticate, authorize } from '@src/middlewares';
+import { authenticate, authorize, validator } from '@src/middlewares';
+import productValidation from '@src/validations/product.validation';
 
 const router = express.Router();
 
 router
   .route('/')
-  .post(authenticate, authorize('admin', 'vendor'), create)
+  .post(
+    authenticate,
+    authorize('admin', 'vendor'),
+    validator(productValidation.create),
+    create
+  )
   .get(listAll);
 router
   .route('/csv')

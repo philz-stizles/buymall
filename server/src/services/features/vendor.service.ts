@@ -3,7 +3,7 @@ import NotFoundError from '@src/errors/not-found';
 import Vendor, { IVendorDocument } from '@src/models/vendor.model';
 import { IVendor } from '@src/models/vendor.model';
 import { httpStatus } from '@src/utils/api.utils';
-import { FilterQuery } from 'mongoose';
+import { FilterQuery, QueryOptions } from 'mongoose';
 
 /**
  * Create a vendor
@@ -53,6 +53,17 @@ const getByName = async (
     .exec();
 };
 
+const getMany = async (
+  query: FilterQuery<IVendorDocument>,
+  options: QueryOptions = { lean: true }
+) => {
+  // If you're executing a query and sending the results without modification to, say, an Express response,
+  // you should use lean.In general, if you do not modify the query results and do not use custom getters,
+  // you should use lean(). If you modify the query results or rely on features like getters or transforms,
+  // you should not use lean().
+  return await Vendor.find(query, {}, options).sort({ createdAt: -1 }).exec();
+};
+
 type VendorUpdateInput = Partial<IVendorDocument>;
 
 /**
@@ -75,8 +86,12 @@ const update = async (
   if (
     update.name &&
     (await getByName(update.name)) &&
-    update.name !== existingVendor.name) {
-    throw new ApiError(httpStatus.BAD_REQUEST, 'There is already a vendor with that name');
+    update.name !== existingVendor.name
+  ) {
+    throw new ApiError(
+      httpStatus.BAD_REQUEST,
+      'There is already a vendor with that name'
+    );
   }
 
   const updatedVendor = await Vendor.findByIdAndUpdate(id, update).select(
@@ -86,12 +101,11 @@ const update = async (
   return updatedVendor;
 };
 
-export const remove = async (query: FilterQuery<IVendorDocument>) => {
-  const targetCategory = await Vendor.findOneAndDelete(query);
-  if (!targetCategory) {
-    throw new NotFoundError('Category does not exist');
+const remove = async (id: string) => {
+  const targetVendor = await Vendor.findByIdAndDelete(id).exec();
+  if (!targetVendor) {
+    throw new NotFoundError('Vendor does not exist');
   }
-  return targetCategory;
 };
 
-export default { create, getById, update };
+export default { create, getMany, getById, update, remove };
