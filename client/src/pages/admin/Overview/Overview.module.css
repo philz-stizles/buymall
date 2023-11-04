@@ -1,0 +1,26 @@
+.overview {
+  /* padding: 3.2rem;
+  max-height: 100vh;
+  overflow-y: scroll;
+  display: grid;
+  row-gap: 3.2rem; */
+}
+
+.top-selling-products {
+  border-radius: 5px;
+  background-color: #212529;
+  color: #fff;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 2.4rem;
+}
+
+.section-header__title {
+  font-weight: 500;
+}
+
+ 

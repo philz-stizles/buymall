@@ -16,6 +16,7 @@ import userRoutes from './user.routes';
 import { authenticate } from '@src/middlewares/auth.middlewares';
 import { validator } from '@src/middlewares';
 import { authValidation } from '@src/validations';
+import { authCheck } from '@src/firebase/auth.middleware';
 
 const router = express.Router();
 
@@ -31,7 +32,7 @@ router.post(
 router.post('/activate-account', activateAccount);
 router.post('/signin', validator(authValidation.signIn), signIn);
 
-router.use('/current-user', authenticate, getCurrentUser);
+router.use('/current-user', authCheck, getCurrentUser);
 
 router.post('/forgot-password', forgotPassword);
 router.patch('/reset-password/:token', resetPassword);

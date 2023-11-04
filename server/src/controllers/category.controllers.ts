@@ -4,6 +4,7 @@ import Product from '@src/models/product.model';
 import Sub from '@src/models/sub-category.model';
 import { ApiResponse, catchAsync } from '@src/utils/api.utils';
 import { CategoryService } from '@src/services';
+import { SubCategory } from '@src/models';
 
 export const create = catchAsync(async (req: Request, res: Response) => {
   const newCategory = await CategoryService.create({
@@ -14,8 +15,8 @@ export const create = catchAsync(async (req: Request, res: Response) => {
 });
 
 export const list = catchAsync(async (req: Request, res: Response) => {
-    const categories = await CategoryService.list({})
-    res.json(new ApiResponse('Retrieved successfully', categories));
+  const categories = await CategoryService.list({});
+  res.json(new ApiResponse('Retrieved successfully', categories));
 });
 
 export const read = async (req: Request, res: Response): Promise<Response> => {
@@ -36,25 +37,23 @@ export const read = async (req: Request, res: Response): Promise<Response> => {
 
 export const update = catchAsync(async (req: Request, res: Response) => {
   const updated = await CategoryService.update(
-      { slug: req.params.slug },
-      req.body,
-    );
-    res.json(new ApiResponse('Updated successfully', updated));
+    { slug: req.params.slug },
+    req.body
+  );
+  res.json(new ApiResponse('Updated successfully', updated));
 });
 
-export const remove =  catchAsync(async (req: Request, res: Response) => {
-    const removed = await CategoryService.remove({
-      slug: req.params.slug,
-    });
-    res.json(new ApiResponse('Deleted successfully', removed));
+export const remove = catchAsync(async (req: Request, res: Response) => {
+  const removed = await CategoryService.remove({
+    slug: req.params.slug,
+  });
+  res.json(new ApiResponse('Deleted successfully', removed));
 });
 
-export const getCategorySubs = catchAsync((req: Request, res: Response)  => {
-  // return Sub.find({ parent: req.params._id }).exec((err, subs) => {
-  //   if (err) {
-  //     console.log(err);
-  //     return res.status(400);
-  //   }
-  //   return res.json(subs);
-  // });
-});
+export const getCategorySubs = catchAsync(
+  async (req: Request, res: Response) => {
+    const subs = await SubCategory.find({ parent: req.params.id });
+
+    return res.json(new ApiResponse('Retrieved successfully', subs));
+  }
+);

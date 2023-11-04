@@ -1,8 +1,6 @@
-import { Section } from "../../../../../components/shared";
-import { Button } from "../../../../../components/ui";
-import { IoMdArrowForward } from "react-icons/io";
-
- 
+import { Section } from '../../../../../components/shared';
+import { Button } from '../../../../../components/ui';
+import { IoMdArrowForward } from 'react-icons/io';
 
 const FindStore = () => (
   <Section className="bg-slate-50">

@@ -3,7 +3,7 @@ import { Schema, model, Document, PopulatedDoc, Model, Types } from 'mongoose';
 import bcrypt from 'bcryptjs';
 import crypto from 'crypto';
 import jwt from 'jsonwebtoken';
-import { IRoleDocument } from '@src/models/role.model';
+import { IRoleDocument, RoleType } from '@src/models/role.model';
 import { IVendorDocument } from './vendor.model';
 
 // Put as much business logic in the models to keep the controllers as simple
@@ -26,7 +26,8 @@ export interface IUser {
   passwordResetExpiresIn?: number;
   passwordResetToken?: string | undefined;
   address: [];
-  roles: PopulatedDoc<IRoleDocument & Document>[];
+  role: RoleType
+  // roles: PopulatedDoc<IRoleDocument & Document>[];
   vendor: IVendorDocument;
   isEmailVerified: boolean;
   isActive: boolean;
@@ -81,7 +82,8 @@ const schema = new Schema<IUserDocument, IUserModel>(
     passwordChangedAt: Date,
     passwordResetToken: String,
     passwordResetExpiresIn: Date,
-    roles: [{ type: Types.ObjectId, ref: 'Role' }],
+    // roles: [{ type: Types.ObjectId, ref: 'Role' }],
+    role: { type: String, enum: RoleType, default: RoleType.CUSTOMER },
     vendor: { type: Types.ObjectId, ref: 'Vendor' },
     isEmailVerified: { type: Boolean, default: true, select: false },
     isActive: { type: Boolean, default: true, select: false },

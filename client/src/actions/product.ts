@@ -1,6 +1,6 @@
 import axios from 'axios';
-import { baseUrl } from '../constants';
-import {   ProductModel } from '../types';
+import { baseUrl } from '../utils/constants';
+import { Product } from '../models/product';
 
 export const createProduct = async (product: any, authToken: string) =>
   await axios.post(`${baseUrl}/products`, product, {
@@ -36,14 +36,18 @@ export const getProduct = async (slug: string) =>
 
 export const updateProduct = async (
   slug: string,
-  product: ProductModel,
+  product: Product,
   authToken: string
 ) =>
   await axios.put(`${baseUrl}/products/${slug}`, product, {
     headers: { authToken },
   });
 
-export const getProducts = async (sort?: string, order?: string, page?: number) =>
+export const getProducts = async (
+  sort?: string,
+  order?: string,
+  page?: number
+) =>
   await axios.post(`${baseUrl}/products/filtered`, {
     sort,
     order,

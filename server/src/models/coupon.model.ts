@@ -4,6 +4,7 @@ import { IVendorDocument } from './vendor.model';
 
 export interface ICoupon {
   name: string;
+  description?: string;
   expiry: Date;
   discount: number;
   isActive?: boolean;
@@ -15,8 +16,7 @@ export interface ICoupon {
 
 export interface ICouponDocument extends ICoupon, Document {}
 
-export interface ICouponModel extends Model<ICouponDocument> {
-}
+export interface ICouponModel extends Model<ICouponDocument> {}
 
 const schema = new Schema<ICouponDocument, ICouponModel>(
   {
@@ -28,6 +28,12 @@ const schema = new Schema<ICouponDocument, ICouponModel>(
       required: [true, 'Name is required'],
       minlength: [6, 'Too short'],
       maxlength: [12, 'Too long'],
+    },
+    description: {
+      type: String,
+      trim: true,
+      minlength: [6, 'Too short'],
+      maxlength: [100, 'Too long'],
     },
     expiry: { type: Date, required: true },
     discount: { type: Number, required: true },

@@ -1,4 +1,4 @@
-import { baseUrl } from '../constants';
+import { baseUrl } from '../utils/constants';
 import axios from 'axios';
 
 export const saveUserAddress = async (authToken: string, address: string) =>

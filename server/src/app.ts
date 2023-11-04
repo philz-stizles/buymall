@@ -24,7 +24,7 @@ app.set('trust proxy', 1);
 app.use(helmet({ contentSecurityPolicy: false }));
 
 // parse json request body
-app.use(express.json({ limit: '10kb' })); // This would limit the body size to 10kb
+app.use(express.json({ limit: '1mb' })); // This would limit the body size to 10kb
 app.use(express.urlencoded({ extended: true, limit: '10kb' })); // This would limit the body size to 10kb
 app.use(cookieParser()); // Parses data from cookies
 

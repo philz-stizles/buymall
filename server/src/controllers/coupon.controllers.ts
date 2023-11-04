@@ -3,9 +3,10 @@ import { ApiResponse, catchAsync } from '@src/utils/api.utils';
 import { CouponService } from '@src/services';
 
 export const create = catchAsync(async (req: Request, res: Response) => {
-  const { name, expiry, discount, isActive } = req.body;
+  const { name, description, expiry, discount, isActive } = req.body;
   const newCoupon = await CouponService.create({
     name,
+    description,
     expiry,
     discount,
     isActive,
@@ -16,7 +17,7 @@ export const create = catchAsync(async (req: Request, res: Response) => {
 });
 
 export const list = catchAsync(async (req: Request, res: Response) => {
-  const coupons = await CouponService.getMany({});
+  const coupons = await CouponService.getMany(req.query);
   res.json(new ApiResponse('Retrieved successfully', coupons));
 });
 

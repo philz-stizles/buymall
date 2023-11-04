@@ -1,10 +1,9 @@
-import { Schema, Types, model, Document, Model } from 'mongoose';
-// import { IUserDocument } from '@src/models/user.model';
+import { Schema, model, Document, Model } from 'mongoose';
 
 export enum RoleType {
   ADMIN = 'admin',
-  TALENT = 'talent',
-  COMPANY = 'company',
+  CUSTOMER = 'customer',
+  VENDOR = 'vendor',
 }
 
 export interface IRole {

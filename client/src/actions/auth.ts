@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { baseUrl } from '../constants';
+import { baseUrl } from '../utils/constants';
 
 export const createOrUpdateUser = async (authToken: string) => {
   return await axios.post(
@@ -11,7 +11,7 @@ export const createOrUpdateUser = async (authToken: string) => {
 
 export const getCurrentUser = async (authToken: string) => {
   return await axios.get(`${baseUrl}/auth/current-user`, {
-    // headers: { 'Content-type': 'application/json', authToken },
+    headers: { authToken },
   });
 };
 

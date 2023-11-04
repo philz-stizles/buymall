@@ -40,8 +40,8 @@ export class Users extends MongoDataSource<IUserDocument> {
     }
 
     // Generate tokens
-    const { _id, fullName, email, roles } = existingUser;
-    const token = TokenService.generate({ _id, email, roles });
+    const { _id, fullName, email, role } = existingUser;
+    const token = TokenService.generate({ _id, email, role });
 
     return {
       _id,

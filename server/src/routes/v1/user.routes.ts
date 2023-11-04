@@ -22,13 +22,17 @@ import {
   resizeUserPhoto,
   uploadUserPhoto,
 } from '@src/middlewares/multer.middlewares';
+import { adminCheck, authCheck } from '@src/firebase/auth.middleware';
 
 const router = express.Router();
 
-router.post('/create-or-update', authenticate, createOrUpdate);
+// router.post('/create-or-update', authenticate, createOrUpdate);
+router.post('/create-or-update', authCheck, createOrUpdate);
 
-router.get('/current-user', authenticate, getCurrentUser);
-router.get('/current-admin', authenticate, authorize('admin'), getCurrentUser);
+// router.get('/current-user', authenticate, getCurrentUser);
+router.get('/current-user', authCheck, getCurrentUser);
+// router.get('/current-admin', authenticate, authorize('admin'), getCurrentUser);
+router.get('/current-admin', authCheck, adminCheck, getCurrentUser);
 
 // Admin routes
 router.get('/admin/orders', authenticate, authorize('admin'), getAllOrders);

@@ -1,10 +1,13 @@
 export { default as Logo }  from "./Logo/Logo";
 export { default as Button } from './Button/Button';
-export { default as Input }  from "./Input/Input";
+export { default as Input }  from "../form/Input/Input";
+export { default as TextArea } from '../form/TextArea/TextArea';
 export { default as Badge }  from "./Badge/Badge";
-export { default as Overlay }  from "./Overlay";
+export { default as Overlay }  from "./Overlay/Overlay";
 export { default as Card }  from "./Card";
 export { default as Heading }  from "./Heading/Heading";
 export { default as EmptyState }  from "./EmptyState/EmptyState";
 export { default as Modal } from './Modal/Modal'
 export { default as AppIcon } from './AppIcon/AppIcon';
+export { default as Pagination } from './Pagination/Pagination';
+export { default as FileUpload } from './FileUpload/FileUpload';

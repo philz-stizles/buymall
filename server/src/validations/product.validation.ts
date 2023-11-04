@@ -6,8 +6,12 @@ const create = {
     description: Joi.string().required(),
     price: Joi.number(),
     quantity: Joi.number().required(),
+    category: Joi.string(),
+    subCategory: Joi.string().allow('', null),
     hasShipping: Joi.boolean().default(false),
     inStock: Joi.boolean().default(false),
+    isPublished: Joi.boolean().default(false),
+    images: Joi.array(),
   }),
 };
 

@@ -8,6 +8,8 @@ import {
 import { useNavigate } from 'react-router-dom';
 import { baseUrl } from '../../../utils/api';
 import { saveAuthenticatedUser } from '../../../utils/auth';
+import { RoleType } from '../../../../src/types';
+import { AuthenticatedUser } from '../../../models/user';
 
 const Auth = () => {
   const [email, setEmail] = useState('');
@@ -31,7 +33,7 @@ const Auth = () => {
           body: JSON.stringify({ email, password }),
         });
         const json = await response.json();
-        if (!json || !json.status) {
+        if (!json || !json.status || !json.data) {
           throw new Error(
             'Authentication is currently not available. Please try again in a few minutes.'
           );
@@ -39,9 +41,19 @@ const Auth = () => {
 
         saveAuthenticatedUser(json.data);
 
+        const { user } = json.data as AuthenticatedUser;
+
+        console.log(json.data);
+
         // If using replace: true, the navigation will replace the current entry in the history stack
         // instead of adding a new one.
-        navigate('/', { replace: true });
+        if (user.role === RoleType.ADMIN) {
+          navigate('/admin', { replace: true });
+        } else if (user.role === RoleType.VENDOR) {
+          navigate('/vendor', { replace: true });
+        } else {
+          navigate('/', { replace: true });
+        }
       } catch (error) {
         console.log(error);
       } finally {

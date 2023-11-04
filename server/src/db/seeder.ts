@@ -183,13 +183,13 @@ const seedRoles = async () => {
 
 const seedDefaultUsers = async () => {
   try {
-    const role = await Role.findOne({ name: 'ADMIN'});
+    // const role = await Role.findOne({ name: 'ADMIN'});
     const adminUser: Partial<IUser> = {
       email: config.admin.username,
       firstName: 'Theophilus',
       lastName: 'Ighalo',
       password: await bcrypt.hash(config.admin.password, 8),
-      roles: [role],
+      role: RoleType.ADMIN,
     };
     await User.findOneAndUpdate({ email: adminUser.email }, adminUser, {
       upsert: true,

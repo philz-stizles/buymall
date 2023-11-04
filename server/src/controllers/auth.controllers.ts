@@ -16,6 +16,7 @@ import {
   VendorService,
 } from '@src/services';
 import { catchAsync } from '@src/utils/api.utils';
+import { RoleType } from '@src/models/role.model';
 
 type SignupWithEmailVerificationBody = {
   name: string;
@@ -36,6 +37,7 @@ const signup = async (req: Request, res: Response) => {
     email,
     password,
     confirmPassword,
+    role: RoleType.CUSTOMER,
   });
 
   // Generate token.
@@ -62,6 +64,7 @@ const vendorSignup = catchAsync(async (req: Request, res: Response) => {
     email,
     password,
     confirmPassword,
+    role: RoleType.VENDOR
   });
 
   // Create new vendor.
@@ -88,6 +91,7 @@ const customerSignup = async (req: Request, res: Response) => {
     email,
     password,
     confirmPassword,
+    role: RoleType.CUSTOMER
   });
 
   // Generate token.
@@ -206,14 +210,6 @@ const signIn = catchAsync(
       data: { user: existingUser, tokens },
       message: 'Sign in successful',
     });
-
-    // return createAndSendTokenWithCookie(
-    //   existingUser,
-    //   200,
-    //   req,
-    //   res,
-    //   'Login successful'
-    // );
   }
 );
 

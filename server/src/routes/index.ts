@@ -7,6 +7,7 @@ import productRoutes from './v1/product.routes';
 import categoryRoutes from './v1/category.routes';
 import subCategoryRoutes from './v1/sub-category.routes';
 import couponRoutes from './v1/coupon.routes';
+import orderRoutes from './v1/order.routes';
 import swaggerDoc from '@src/docs';
 import logger from '@src/config/logger';
 import config from '@src/config';
@@ -19,6 +20,7 @@ router.use('/categories', categoryRoutes);
 router.use('/sub-categories', subCategoryRoutes);
 router.use('/vendors', vendorRoutes);
 router.use('/products', productRoutes);
+router.use('/orders', orderRoutes);
 router.use('/coupons', couponRoutes);
 
 // API documentation.

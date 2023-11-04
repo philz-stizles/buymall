@@ -4,7 +4,7 @@ import AppError from '../errors/app.error';
 import { IJWTokenPayload } from '@src/interfaces/JsonWebToken';
 import { catchAsync } from '@src/utils/api.utils';
 import { TokenService } from '@src/services';
-import { IRole, IRoleDocument } from '@src/models/role.model';
+import { RoleType } from '@src/models/role.model';
 import { Vendor } from '@src/models';
 
 export const authenticate = catchAsync(
@@ -15,14 +15,13 @@ export const authenticate = catchAsync(
       req.headers.authorization &&
       req.headers.authorization.startsWith('Bearer')
     ) {
-      // console.log('HEADERS', req.headers);
       token = req.headers.authorization.split(' ')[1];
     } else if (req.cookies.token) {
       // eslint-disable-next-line prefer-destructuring
       token = req.cookies.token;
+    } else {
+      token = req.headers.authtoken as string;
     }
-
-    // console.log('AUTHENTICATE', token);
 
     if (!token) throw new AppError('You are not logged in. Please log', 401);
 
@@ -30,11 +29,11 @@ export const authenticate = catchAsync(
     const decodedToken = TokenService.verify(token) as IJWTokenPayload;
     if (!decodedToken)
       return next(new AppError('You are not authorized. Please log', 401));
-    // console.log('TOKEN', decodedToken);
+
     // Check if user exists(or if a previously existing user with a valid token has been deleted)
     // and return user if true
-    const existingUser = (await User.findById(decodedToken.id).populate(
-      'roles'
+    const existingUser = (await User.findById(
+      decodedToken.id
     )) as IUserDocument;
     if (!existingUser)
       return next(
@@ -65,13 +64,9 @@ export const authorize = (
 ): // eslint-disable-next-line no-unused-vars
 ((req: Request, res: Response, next: NextFunction) => void) =>
   catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-    const { roles, id } = req.user;
-    if (
-      roles.some((role: IRole) =>
-        authorizedUsers.includes(role.name.toLowerCase())
-      )
-    ) {
-      if (roles.some((role: IRole) => role.name === 'VENDOR')) {
+    const { role, id } = req.user;
+    if (authorizedUsers.includes(role.toLowerCase())) {
+      if (role === RoleType.VENDOR) {
         const existingVendor = await Vendor.findOne({
           users: id,
         });

@@ -4,18 +4,22 @@ import NotFoundError from '@src/errors/not-found';
 import SubCategory, {
   ISubCategoryDocument,
 } from '@src/models/sub-category.model';
+import slugify from 'slugify';
 
 const create = async (
-  modelObject: ISubCategoryDocument
+  input: ISubCategoryDocument
 ): Promise<ISubCategoryDocument> => {
   const existingSubCategory = await SubCategory.findOne({
-    name: modelObject.name,
+    name: input.name,
   });
   if (existingSubCategory) {
     throw new BadRequestError('Sub Category already exists');
   }
 
-  const newSubCategory = await SubCategory.create(modelObject);
+  const newSubCategory = await SubCategory.create({
+    ...input,
+    slug: slugify(input.name),
+  });
 
   return newSubCategory;
 };
@@ -38,19 +42,21 @@ const list = async (
   // you should use lean.In general, if you do not modify the query results and do not use custom getters,
   // you should use lean(). If you modify the query results or rely on features like getters or transforms,
   // you should not use lean().
-  return SubCategory.find(query, {}, options);
+  return SubCategory.find(query, {}, options).sort({ createdAt: -1 }).exec();
 };
 
 const update = async (
-  query: FilterQuery<ISubCategoryDocument>,
+  id: string,
   update: UpdateQuery<ISubCategoryDocument>,
   options: QueryOptions = { new: true }
 ) => {
-  const targetSubCategory = await SubCategory.findOneAndUpdate(
-    query,
-    update,
+  const targetSubCategory = await SubCategory.findByIdAndUpdate(
+    id,
+    { ...update, slug: slugify(update.name) },
     options
   );
+  // { slug: req.params.slug },
+
   if (!targetSubCategory) {
     throw new NotFoundError('Sub Category does not exist');
   }

@@ -1,52 +1,48 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from 'react';
 
-type RequestOptions = {
-  endpoint: string; //
-  method?: string;
-  headers?: any;
-  body?: any;
+type HttpConfig = {
+  method: string;
 };
 
-type Transformer = (data: any) => {};
+const fetcher = async (url: string, config: HttpConfig) => {
+  const response = await fetch(url, config);
+  const data = await response.json();
 
-// Hooks can return anything, numbers, strings, arrays, objects etc...
-// export const useHttp = ({ url, method, headers, body}: RequestOptions, transform: Transformer) => {
-export const useHttp = () => {
-  // const [data, setData] = useState();
+  if (!response.ok) {
+    throw new Error(
+      data.message || 'Something went wrong. Failed to send request'
+    );
+  }
+
+  return data;
+};
+
+export const useHttp = <T>(
+  url: string,
+  initialValue: T,
+  config: HttpConfig
+) => {
+  const [data, setData] = useState<T>(initialValue);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [error, setError] = useState<null | any>(null);
+  const [error, setError] = useState<string | object | null>(null);
 
-  const sendRequest = useCallback(
-    async (
-      { endpoint, method, headers, body }: RequestOptions,
-      callback: Transformer
-    ) => {
-      try {
-        setIsLoading(true);
-        setError(null);
-        const response = await fetch(
-          `${process.env.REACT_APP_BASE_URL}/${endpoint}.json`,
-          {
-            method: method || "GET",
-            headers: headers || {},
-            body: body ? JSON.stringify(body) : null,
-          }
-        );
+  const sendRequest = useCallback(async () => {
+    try {
+      setIsLoading(true);
+      const data = await fetcher(url, config);
+      setData(data);
+    } catch (error: any) {
+      setError(error.message || 'Something went wrong');
+    }
 
-        if (!response.ok) {
-          throw Error("Request failed. Please try again later.");
-        }
+    setIsLoading(false);
+  }, [config, url]);
 
-        const json = await response.json();
-        callback(json.data);
-      } catch (error: any) {
-        setError(error.message || "Something went wrong");
-      }
+  useEffect(() => {
+    if (config && config.method === 'GET') {
+      sendRequest();
+    }
+  }, [config, sendRequest]);
 
-      setIsLoading(false);
-    },
-    []
-  );
-
-  return { sendRequest, isLoading, error };
+  return { data, isLoading, error, mutate: sendRequest, reload: sendRequest };
 };

@@ -8,8 +8,7 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 (2.) [Eslint](#eslint)
 (3.) [Sass](#sass)
 (4.) [Styling using Tailwindcss](#styling-using-tailwindcss)
-(5.) [React Transition Group](#react-transition-group)
-(6.) [Animation Alternatives](#react-transition-group)
+(5.) [Animation using Framer Motion](#5-animation-using-framer-motion)
 (7.) [Testing](#testing)
 (8.) [Redux using the Redux Toolkit](#redux-using-the-redux-toolkit)
 
@@ -63,20 +62,20 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
   @tailwind utilities;
   ```
 
-### React Transition Group
+### (5.) Animation using Framer Motion
 
-    npm i react-transition-group
-    npm i --save-dev @types/react-transition-group
-
-### Animation Alternatives
-
-    npm i react-motion
-
-    npm i react-move
-
-    npm i react-router-transition
+    npm i framer-motion
 
 ### Testing
+
+npm i -D jest ts-jest ts-node @types/jest
+npm i -D @testing-library/react @testing-library/jest-dom @testing-library/user-event
+npm i -D  jest-environment-jsdom identity-obj-proxy
+
+npx jest --init
+
+"build": "tsc -p tsconfig.prod.json && vite build",
+"test": "NODE_ENV=test jest"
 
 Testing react hooks:
 

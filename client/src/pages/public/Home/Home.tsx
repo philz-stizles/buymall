@@ -7,6 +7,7 @@ import Services from './components/Services/Services';
 import Testimonials from './components/Testimonials/Testimonials';
 
 const Home = () => {
+  
   return (
     <>
       <Cta />
@@ -17,6 +18,7 @@ const Home = () => {
       <Blogs />
       <FindStore />
       <Testimonials />
+      
     </>
   );
 };

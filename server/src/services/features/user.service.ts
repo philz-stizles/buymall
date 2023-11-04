@@ -14,9 +14,7 @@ const create = async (data: Partial<IUser>): Promise<IUserDocument> => {
     throw new ApiError(httpStatus.BAD_REQUEST, 'Email already taken');
   }
 
-  const role = await Role.findOne({ name: 'VENDOR' });
-
-  return await User.create({...data, roles: [role]});
+  return await User.create(data);
 };
 
 /**
@@ -88,4 +86,4 @@ const updateUserByEmail = async (
   return updatedUser;
 };
 
-export default { create, getById,  getUserByEmail, updateUserByEmail };
+export default { create, getById, getUserByEmail, updateUserByEmail };

@@ -2,11 +2,16 @@
 import { NextFunction, Request, Response } from 'express';
 import _ from 'lodash';
 import User, { IUserDocument } from '../models/user.model';
-import { catchAsync, createAndSendTokenWithCookie, filterRequestBody } from '../utils/api.utils';
+import {
+  catchAsync,
+  createAndSendTokenWithCookie,
+  filterRequestBody,
+} from '../utils/api.utils';
 import AppError from '../errors/app.error';
 import * as factory from '../factories/handler.factory';
 import Order, { OrderDocument } from '../models/order.model';
 import { TokenService } from '@src/services';
+import { DecodedIdToken } from 'firebase-admin/lib/auth/token-verifier';
 
 export const createUser = catchAsync(async (req: Request, res: Response) => {
   const { name, email, password, confirmPassword } = req.body;
@@ -30,19 +35,17 @@ export const createUser = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
-export const createOrUpdate = catchAsync(async (
-  req: Request,
-  res: Response
-)  => {
-  if (req.user) {
-    return res.json(null);
-  }
-  const { fullName, avatar, email } = req.user as IUserDocument;
-  console.log(fullName, avatar, email);
- 
+export const createOrUpdate = catchAsync(
+  async (req: Request, res: Response) => {
+    // if (req.user) {
+    //   return res.json(null);
+    // }
+    const { name, picture, email } = req.user as DecodedIdToken;
+    console.log('req.user', name, picture, email);
+
     const existingUser = await User.findOneAndUpdate(
       { email },
-      { name, avatar },
+      { fullName: name, avatar: picture },
       { new: true }
     );
 
@@ -50,16 +53,19 @@ export const createOrUpdate = catchAsync(async (
       console.log('USER UPDATE user');
       res.json(existingUser);
     } else {
+      const password = 'P@ssw0rd'
       const newUser = await new User({
         email,
-        name: email.split('@')[0],
-        avatar,
+        name: email?.split('@')[0],
+        avatar: picture,
+        password,
+        confirmPassword: password 
       }).save();
       console.log('USER CREATED', newUser);
       res.json(newUser);
     }
-  
-});
+  }
+);
 
 export const updateMe = async (
   req: Request,

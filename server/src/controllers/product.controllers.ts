@@ -64,24 +64,26 @@ export const createWithCsv = async (
   }
 };
 
-export const uploadFile = async (req: Request, res: Response) => {
+export const uploadFile = catchAsync(async (req: Request, res: Response) => {
   console.log(req.body.image);
   const result = await cloudinaryService.uploadFile(req.body.image);
 
-  res.json({
-    public_id: result.public_id,
-    url: result.secure_url,
-  });
-};
+  res.status(201).json(
+    new ApiResponse('File uploaded successfully', {
+      public_id: result.public_id,
+      url: result.secure_url,
+    })
+  );
+});
 
-export const removeFile = async (req: Request, res: Response) => {
-  cloudinaryService.removeFile(req.body.public_id, (err, result): Response => {
+export const removeFile = catchAsync(async (req: Request, res: Response) => {
+  cloudinaryService.removeFile(req.body.publicId, (err, result): Response => {
     console.log('error', err);
     console.log('result', result);
     if (err) return res.json({ success: false, err });
-    return res.send('ok');
+    return res.json(new ApiResponse('File removed successfully'));
   });
-};
+});
 
 type ProductQuery = {
   limit: string;
@@ -93,9 +95,9 @@ export const listAll = async (req: Request, res: Response) => {
     .limit(parseInt(limit, 10))
     .populate('category')
     .populate('subs')
-    .sort([['createdAt', 'desc']])
-    .lean();
-  res.json(products);
+    .sort([['createdAt', 'desc']]);
+  // .lean();
+  res.json(new ApiResponse('File uploaded successfully', products));
 };
 
 export const listWithCsv = async (

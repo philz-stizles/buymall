@@ -23,14 +23,19 @@ const getById = async (id: string): Promise<ICouponDocument | null> => {
 };
 
 const getMany = async (
-  query: FilterQuery<ICouponDocument>,
+  query: Record<string, any>,
   options: QueryOptions = { lean: true }
 ) => {
   // If you're executing a query and sending the results without modification to, say, an Express response,
   // you should use lean.In general, if you do not modify the query results and do not use custom getters,
   // you should use lean(). If you modify the query results or rely on features like getters or transforms,
   // you should not use lean().
-  return await Coupon.find(query, {}, options).sort({ createdAt: -1 }).exec();
+  let queryStr = JSON.stringify(query);
+  queryStr = queryStr.replace(/\b(gt|gte|lt|lte)\b/g, match => `$${match}`);
+  const filterQuery = JSON.parse(queryStr);
+  return await Coupon.find({ vendor: query.vendor }, {}, options)
+    .sort({ createdAt: -1 })
+    .exec();
 };
 
 const update = async (

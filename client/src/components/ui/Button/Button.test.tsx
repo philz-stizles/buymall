@@ -1,14 +1,14 @@
 import { render, screen } from "@testing-library/react";
 import Button from "./Button";
-import userEvent from "@testing-library/user-event";
-import { RouterProvider, createBrowserRouter } from "react-router-dom";
 
 describe("Button Component", () => {
   test("renders a button with label", () => {
     // Arrange.
-    render(<Button label="Submit" />);
+    const label = 'Submit';
+    render(<Button label={label} />);
 
     // Act.
+    // No actions.
 
     // Assert.
     const linkElement = screen.getByText(/Submit/i, { exact: true });

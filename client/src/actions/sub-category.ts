@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { baseUrl } from '../constants';
+import { baseUrl } from '../utils/constants';
 
 export const createSubCategory = async (data: any, authToken: string) => {
   return await axios.post(`${baseUrl}/sub-categories`, data, {

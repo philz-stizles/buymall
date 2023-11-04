@@ -1,13 +1,13 @@
-import { PropsWithChildren } from "react";
-import Button from "../Button/Button"
-import { MdClose } from "react-icons/md";
+import { PropsWithChildren } from 'react';
+import { MdClose } from 'react-icons/md';
+import { motion } from 'framer-motion';
+import { createPortal } from 'react-dom';
 
 type Props = {
   isOpen?: boolean;
   disabled?: boolean;
   title?: string;
-  subtitle?: string;
-  body?: React.ReactElement;
+  subTitle?: string;
   footer?: React.ReactElement;
   actionLabel?: string;
   onClose: () => void;
@@ -16,29 +16,61 @@ type Props = {
   onSecondaryAction?: () => void;
 };
 
-const Modal = ({ title, body, children, onClose, onSubmit}: PropsWithChildren<Props>) => {
-  return (
-    <div className="fixed right-0 z-50 left-0 top-0 bottom-0 w-full h-screen overflow-x-hidden overflow-y-auto flex justify-center items-center bg-black/60 outline-none">
-      <div className="rounded-md shadow-lg overflow-hidden bg-white w-[36rem] -translate-y-1/2">
+const Modal = ({
+  title,
+  subTitle,
+  children,
+  onClose,
+}: PropsWithChildren<Props>) => {
+  return createPortal(
+    <div className="overlay" onClick={onClose}>
+      <motion.dialog
+        variants={{
+          hidden: { opacity: 0, y: 30 },
+          visible: { opacity: 1, y: 0 },
+        }}
+        initial="hidden"
+        animate="visible"
+        exit="hidden"
+        open
+        className="modal"
+        onClick={(e) => {
+          e.stopPropagation();
+        }}
+      >
         {/* Modal header */}
-        <div className="flex justify-between items-center p-4 border-b border-slate-200">
-          <h5 className="text-xl font-medium leading-normal">{title}</h5>
-          <MdClose className="cursor-pointer" size={20} onClick={onClose} />
+        <div className="flex flex-col space-y-1.5 text-center sm:text-left">
+          <h2 className="text-lg font-semibold leading-none tracking-tight">
+            {title}
+          </h2>
+          {subTitle && (
+            <p className="text-sm text-muted-foreground">{subTitle}</p>
+          )}
         </div>
 
+        {/* Modal close button */}
+        <button
+          type="button"
+          className="absolute right-6 top-6 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground"
+        >
+          <MdClose className="cursor-pointer" size={18} onClick={onClose} />
+          <span className="sr-only">Close</span>
+        </button>
+
         {/* Modal body */}
-        <div className="relative flex-auto p-7">{body}</div>
+        <div className="relative flex-auto pt-6">{children}</div>
 
         {/* Modal footer */}
-        {onSubmit && (
+        {/* {onSubmit && (
           <div className="flex flex-shrink-0 flex-wrap justify-end items-center gap-2 px-7 pb-7">
             <Button label="Cancel" onClick={onClose} />
             <Button label="Save" onClick={onSubmit} />
           </div>
-        )}
-      </div>
-    </div>
+        )} */}
+      </motion.dialog>
+    </div>,
+    document.getElementById('modal')!
   );
-}
+};
 
-export default Modal
+export default Modal;

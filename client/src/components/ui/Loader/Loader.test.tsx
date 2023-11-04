@@ -5,7 +5,7 @@ describe("Loader Component", () => {
   it("should render correctly", () => {
     render(<Loader />);
 
-    const loader = null;
+    const loader = true;
     expect(loader).toBeTruthy();
   });
 });

@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { baseUrl } from '../constants';
+import { baseUrl } from '../utils/constants';
 
 const endpoint = 'categories';
 

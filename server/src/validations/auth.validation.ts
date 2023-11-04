@@ -22,7 +22,10 @@ const signUpVendor = {
   body: Joi.object().keys({
     companyName: Joi.string().required(),
     email: Joi.string().required().email(),
+    firstName: Joi.string(),
+    lastName: Joi.string(),
     password: Joi.string().required().custom(strongPassword),
+    confirmPassword: Joi.string().required(),
   }),
 };
 

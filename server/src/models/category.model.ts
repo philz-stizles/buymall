@@ -41,4 +41,12 @@ const schema = new Schema<ICategoryDocument, ICategoryModel>(
   { timestamps: true }
 );
 
+schema.set('toJSON', {
+  virtuals: true,
+  versionKey: false,
+  transform: (_, ret) => {
+    delete ret._id;
+  },
+});
+
 export default model<ICategoryDocument, ICategoryModel>('Category', schema);

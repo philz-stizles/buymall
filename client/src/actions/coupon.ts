@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { baseUrl } from '../constants';
+import { baseUrl } from '../utils/constants';
 
 export const createCoupon = async (data: any, authToken: string) =>
   await axios.post(`${baseUrl}/coupons`, data, {

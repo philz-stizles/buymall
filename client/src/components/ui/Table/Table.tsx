@@ -1,6 +1,5 @@
-import { MdDelete, MdDeleteOutline, MdModeEditOutline } from "react-icons/md";
-import { CSSTransition, TransitionGroup } from "react-transition-group";
-import './Table.css'
+import { MdDelete, MdDeleteOutline, MdModeEditOutline } from 'react-icons/md';
+import './Table.css';
 
 type Props = {
   title?: string;
@@ -43,46 +42,36 @@ const Table = ({ title, columns, rows }: Props) => {
               ))}
             </tr>
           </thead>
-          <TransitionGroup component="tbody" className="">
+          <tbody className="">
             {/* {rows.length <= 0 && <div><img src={EmptyImage} alt="Empty" /></div>} */}
             {rows.map((row: any) => (
-              <CSSTransition
-                key={row.id}
-                classNames="fade"
-                timeout={300}
-                addEndListener={(node, done) => {
-                  // use the css transitionend event to mark the finish of a transition
-                  node.addEventListener("transitionend", done, false);
-                }}
-              >
-                <tr className="text-sm">
-                  <td className="px-2 inline-flex relative flex-col">
-                    <label>
-                      <span className="relative cursor-pointer">
-                        <input
-                          type="checkbox"
-                          className="absolute top-0 bottom-0 left-0 right-0 cursor-pointer w-full h-full z-[1] opacity-0"
-                        />
-                        <span className="bg-white block relative top-0 left-0 h-4 w-4 rounded-sm border border-collapse border-slate-200 transition"></span>
-                        {/*   direction: ltr; */}
-                      </span>
-                    </label>
-                  </td>
-                  <td className="p-4">
-                    <span className="block">{row.name}</span>
-                  </td>
-                  <td className="p-4">{row.description}</td>
-                  <td className="p-4">{row.createdAt}</td>
-                  <td className="p-4">{row.name}</td>
-                  <div className="p-4 flex justify-end gap-4 items-center">
-                    <MdModeEditOutline size={18} />
-                    <MdDelete size={18} />
-                    <MdDeleteOutline size={20} />
-                  </div>
-                </tr>
-              </CSSTransition>
+              <tr key={row.id} className="text-sm">
+                <td className="px-2 inline-flex relative flex-col">
+                  <label>
+                    <span className="relative cursor-pointer">
+                      <input
+                        type="checkbox"
+                        className="absolute top-0 bottom-0 left-0 right-0 cursor-pointer w-full h-full z-[1] opacity-0"
+                      />
+                      <span className="bg-white block relative top-0 left-0 h-4 w-4 rounded-sm border border-collapse border-slate-200 transition"></span>
+                      {/*   direction: ltr; */}
+                    </span>
+                  </label>
+                </td>
+                <td className="p-4">
+                  <span className="block">{row.name}</span>
+                </td>
+                <td className="p-4">{row.description}</td>
+                <td className="p-4">{row.createdAt}</td>
+                <td className="p-4">{row.name}</td>
+                <div className="p-4 flex justify-end gap-4 items-center">
+                  <MdModeEditOutline size={18} />
+                  <MdDelete size={18} />
+                  <MdDeleteOutline size={20} />
+                </div>
+              </tr>
             ))}
-          </TransitionGroup>
+          </tbody>
         </table>
       </div>
       <div></div>

@@ -1,8 +1,9 @@
 export interface Coupon {
-    id: string;
-    name: string;
-    description: string;
-    code: string;
-    createdAt?: string;
-    createdBy?: string;
+  id: string;
+  name: string;
+  description: string;
+  expiry: string;
+  discount: number;
+  createdAt?: string;
+  createdBy?: string;
 }

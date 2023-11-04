@@ -1,17 +1,19 @@
 import { FilterQuery } from 'mongoose';
 import { Request, Response } from 'express';
-import slugify from 'slugify';
 import SubCategory from '@src/models/sub-category.model';
 import Product, { IProductDocument } from '@src/models/product.model';
-import { catchAsync } from '@src/utils/api.utils';
+import { ApiResponse, catchAsync } from '@src/utils/api.utils';
+import { SubCategoryService } from '@src/services';
 
 export const create = catchAsync(async (req: Request, res: Response) => {
-  const { name, parent } = req.body;
-  res.json(await new SubCategory({ name, parent, slug: slugify(name) }).save());
+  const created = await SubCategoryService.create(req.body);
+  res.json(new ApiResponse('Created successfully', created));
 });
 
-export const list = async (req: Request, res: Response): Promise<Response> =>
-  res.json(await SubCategory.find({}).sort({ createdAt: -1 }).exec());
+export const list = catchAsync(async (req: Request, res: Response) => {
+  const subCats = await SubCategoryService.list(req.query || {});
+  res.json(new ApiResponse('Created successfully', subCats));
+});
 
 export const read = async (req: Request, res: Response) => {
   const subCategory = await SubCategory.findOne({
@@ -27,19 +29,13 @@ export const read = async (req: Request, res: Response) => {
 };
 
 export const update = catchAsync(async (req: Request, res: Response) => {
-  const { name, parent } = req.body;
-
-  const updated = await SubCategory.findOneAndUpdate(
-    { slug: req.params.slug },
-    { name, parent, slug: slugify(name) },
-    { new: true }
-  );
-  res.json(updated);
+  const updated = await SubCategoryService.update(req.params.id, req.body);
+  res.json(new ApiResponse('Updated Successfully', updated));
 });
 
 export const remove = catchAsync(async (req: Request, res: Response) => {
   const deleted = await SubCategory.findOneAndDelete({
     slug: req.params.slug,
   });
-  res.json(deleted);
+  res.json(new ApiResponse('Updated Successfully', deleted));
 });

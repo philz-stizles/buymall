@@ -38,8 +38,13 @@ router.post('/filtered', list);
 
 router.get('/total', getProductsTotal);
 
-router.post('/upload', authenticate, authorize('admin'), uploadFile);
-router.post('/remove-file', authenticate, authorize('admin'), removeFile);
+router.post('/upload-file', authenticate, authorize('admin', 'vendor'), uploadFile);
+router.post(
+  '/remove-file',
+  authenticate,
+  authorize('admin', 'vendor'),
+  removeFile
+);
 
 router
   .route('/:slug')

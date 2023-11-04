@@ -25,6 +25,8 @@ const signIn = async (
     'email',
     'name',
     'password',
+    'firstName',
+    'lastName',
     'role',
     'isEmailVerified',
     'createdAt',
@@ -38,7 +40,7 @@ const signIn = async (
   if (!(await existingUser.comparePassword(password))) {
     throw new ApiError(httpStatus.BAD_REQUEST, 'Invalid user credentials');
   }
-  return exclude(existingUser, ['password']);
+  return exclude(existingUser.toJSON(), ['password']);
 };
 
 const verifyEmailWithToken = async (refresh: string) => {};

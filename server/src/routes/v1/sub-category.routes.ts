@@ -7,11 +7,21 @@ import {
   remove,
   list,
 } from '@src/controllers/sub-category.controllers';
+import { validator } from '@src/middlewares';
+import subCategoryValidation from '@src/validations/sub-category.validation';
 
 const router = express.Router();
 
 // routes
-router.route('/').post(authenticate, authorize('admin'), create).get(list);
+router
+  .route('/')
+  .post(
+    authenticate,
+    authorize('admin'),
+    validator(subCategoryValidation.create),
+    create
+  )
+  .get(list);
 
 router
   .route('/:slug')

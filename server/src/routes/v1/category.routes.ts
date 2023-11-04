@@ -14,7 +14,12 @@ const router = Router();
 
 router
   .route('/')
-  .post(authenticate, authorize('admin'), validator(categoryValidation.create), create)
+  .post(
+    authenticate,
+    authorize('admin'),
+    validator(categoryValidation.create),
+    create
+  )
   .get(list);
 
 router
@@ -23,6 +28,6 @@ router
   .put(authenticate, update)
   .delete(authenticate, remove);
 
-router.get('/:_id/subs', getCategorySubs);
+router.get('/:id/sub-categories', getCategorySubs);
 
 export default router;

@@ -6,6 +6,7 @@ import { ISubCategoryDocument } from './sub-category.model';
 import { IVendorDocument } from './vendor.model';
 
 interface IFileUpload {
+  public_id?: string;
   id: string;
   url: string;
 }
@@ -72,7 +73,7 @@ const schema = new Schema<IProductDocument, IProductModel>(
     subs: [{ type: Types.ObjectId, ref: 'SubCategory' }],
     quantity: Number,
     sold: { type: Number, default: 0 },
-    images: [{ id: String, url: String }],
+    images: [{ public_id: String, id: String, url: String }],
     shipping: { type: Boolean, required: true, default: false },
     inStock: { type: Boolean, required: true, default: false },
     color: [
@@ -93,6 +94,14 @@ const schema = new Schema<IProductDocument, IProductModel>(
   },
   { timestamps: true }
 );
+
+schema.set('toJSON', {
+  transform: (_, ret) => {
+    ret.id = ret._id;
+    delete ret._id;
+    delete ret.__v;
+  },
+});
 
 schema.pre('validate', async function (next) {
   const product = this as IProductDocument;

@@ -94,10 +94,56 @@ const generateTokens = async (payload: string | any | Buffer) => {
   };
 };
 
+const generateTokenWithCookie = async (payload: string | any | Buffer) => {
+  const accessExpiresIn = config.jwt.authAccessExpiresIn;
+  const accessTokenExpires = moment().add(accessExpiresIn, 'seconds');
+  const accessToken = jwt.sign(payload, config.jwt.authSecret, {
+    expiresIn: accessExpiresIn,
+  });
+
+  const refreshExpiresIn = config.jwt.authAccessExpiresIn;
+  const refreshTokenExpires = moment().add(refreshExpiresIn, 'seconds');
+
+  // const token = TokenService.generate({ id: user._id });
+  // const expiresIn: any = process.env.JWT_AUTH_COOKIE_EXPIRES_IN;
+  // const cookieOptions = {
+  //   expires: new Date(Date.now() + expiresIn * 24 * 60 * 60 * 1000),
+  //   httpOnly: true,
+  //   // secure: req.secure || req.headers['x-forwarded-proto'] === 'https', // This is heroku specific
+  // };
+
+  // // if(process.env.NODE_ENV === 'production') {
+  // //     cookieOptions.secure = true
+  // // }
+
+  // // console.log(112, user);
+
+  // res.cookie('token', token, cookieOptions);
+
+ // const retrievedUser = { ...user.toJSON(), password: undefined };
+
+  const refreshToken = jwt.sign(payload, config.jwt.authSecret, {
+    expiresIn: refreshExpiresIn,
+  });
+
+  return {
+    access: {
+      token: accessToken,
+      expiresIn: accessTokenExpires.toDate(),
+    },
+    refresh: {
+      token: refreshToken,
+      expiresIn: refreshTokenExpires.toDate(),
+    },
+  };
+};
+
+
 export const verify = (token: string) =>
   jwt.verify(token, config.jwt.authSecret);
 
 export default {
+  generateTokenWithCookie,
   generateTokens,
   generateAuthTokens,
   generateResetPasswordToken,

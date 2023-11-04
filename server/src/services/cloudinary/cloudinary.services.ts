@@ -15,6 +15,7 @@ export const uploadFile = async (file: string): Promise<void | any> => {
     return await cloudinary.uploader.upload(file, {
       public_id: `${Date.now()}`,
       resource_type: 'auto', // jpeg, png
+      folder: 'buymall'
     });
   } catch (error: any) {
     console.log(error.message);

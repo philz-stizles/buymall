@@ -7,14 +7,18 @@ export interface ReadOnlyURLSearchParams extends URLSearchParams {
 
 export enum RoleType {
   ADMIN = 'admin',
-  TALENT = 'talent',
-  COMPANY = 'company',
+  CUSTOMER = 'Customer',
+  VENDOR = 'vendor',
 }
 
 export interface User {
   email: string;
   name: string;
   role: RoleType;
+}
+
+export interface Role {
+  name: string;
 }
 
 export interface Skill {

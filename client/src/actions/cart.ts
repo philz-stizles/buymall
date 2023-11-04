@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { baseUrl } from '../constants';
+import { baseUrl } from '../utils/constants';
 
 export const addUserCart = async (cart: any, authToken: string) =>
   await axios.post(`${baseUrl}/carts`, { cart }, { headers: { authToken } });

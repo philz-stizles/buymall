@@ -1,13 +1,15 @@
-import { Category } from "./category";
+import { Category } from './category';
 
 export interface Product {
-    id: string;
-    name: string;
-    slug: string;
-    description: string;
-    imageSrc?: string;
-    images?: string[];
-    category?: Category;
-    createdAt?: string;
-    createdBy?: string;
+  id: string;
+  title: string;
+  slug: string;
+  price: number;
+  description: string;
+  imageSrc?: string;
+  images?: string[];
+  category?: Category;
+  isPublished?: boolean;
+  createdAt?: string;
+  createdBy?: string;
 }
