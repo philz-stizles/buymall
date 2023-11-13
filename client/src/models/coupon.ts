@@ -4,6 +4,7 @@ export interface Coupon {
   description: string;
   expiry: string;
   discount: number;
+  isPublished: boolean;
   createdAt?: string;
   createdBy?: string;
 }

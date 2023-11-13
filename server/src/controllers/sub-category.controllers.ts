@@ -16,16 +16,15 @@ export const list = catchAsync(async (req: Request, res: Response) => {
 });
 
 export const read = async (req: Request, res: Response) => {
-  const subCategory = await SubCategory.findOne({
-    slug: req.params.slug,
-  }).exec();
+  const subCategory = await SubCategory.findById(req.params.id,
+  ).exec();
   const products = await Product.find({
     subs: subCategory,
   } as FilterQuery<IProductDocument>)
     .populate('category')
     .exec();
 
-  res.json({ subCategory, products });
+  res.json(new ApiResponse('Created successfully', subCategory));
 };
 
 export const update = catchAsync(async (req: Request, res: Response) => {

@@ -14,18 +14,35 @@
     /* min-w-[32rem] */
     @apply p-8 relative bg-white min-w-[36rem] flex flex-col rounded-lg shadow-lg border-0 outline-none focus:outline-none w-full max-w-lg md:w-full sm:max-w-[425px];
   }
+  .input {
+    @apply bg-white px-3 py-2 outline-none border rounded-md transition text-sm placeholder-slate-400 placeholder:text-sm focus:outline-none pr-3 disabled:cursor-not-allowed disabled:bg-slate-100 disabled:text-slate-300 disabled:border-slate-200 disabled:shadow-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus:border-sky-500 focus:ring-1 focus:ring-sky-500  file:border-0 file:bg-transparent file:text-sm file:font-medium;
+  }
 }
 
 :root {
   font-family: 'Inter', sans-serif;
-  /* line-height: 1.5;
-  font-weight: 400;
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  -webkit-text-size-adjust: 100%; */
+  --background: 0 0% 100%;
+  --foreground: 222.2 84% 4.9%;
+  --muted: 210 40% 96.1%;
+  --muted-foreground: 215.4 16.3% 46.9%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 222.2 84% 4.9%;
+  --card: 0 0% 100%;
+  --card-foreground: 222.2 84% 4.9%;
+  --border: 214.3 31.8% 91.4%;
+  --input: 214.3 31.8% 91.4%;
+  --primary: 222.2 47.4% 11.2%;
+  --primary-foreground: 210 40% 98%;
+  --secondary: 210 40% 96.1%;
+  --secondary-foreground: 222.2 47.4% 11.2%;
+  --accent: 210 40% 96.1%;
+  --accent-foreground: 222.2 47.4% 11.2%;
+  --destructive: 0 84.2% 60.2%;
+  --destructive-foreground: 210 40% 98%;
+  --ring: 215 20.2% 65.1%;
+  --radius: 0.5rem;
 }
+
 /* 
 a {
   font-weight: 500;
@@ -45,4 +62,32 @@ body,
 
 body {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+}
+
+.text-foreground {
+  color: hsl(var(--foreground));
+}
+
+.text-muted-foreground {
+  color: hsl(var(--muted-foreground));
+}
+
+.text-secondary-foreground {
+  color: hsl(var(--secondary-foreground));
+}
+
+.bg-border {
+  background-color: hsl(var(--border));
+}
+
+.bg-secondary {
+  background-color: hsl(var(--secondary));
+}
+
+.bg-muted {
+    background-color: hsl(var(--muted));
+}
+
+.border-input {
+  border-color: hsl(var(--input));
 }

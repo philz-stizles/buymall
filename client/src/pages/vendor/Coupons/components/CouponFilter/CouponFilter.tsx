@@ -1,15 +1,19 @@
+import { useState } from 'react';
 import { Search } from '../../../../../components/form';
 
 type Props = {};
 
 const CouponFilter = (props: Props) => {
+  const [search, setSearch] = useState('');
+
   return (
     <div className="flex items-center justify-between">
       <div className="flex flex-1 items-center space-x-2">
         <input
           className="flex rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 h-8 w-[150px] lg:w-[250px]"
           placeholder="Filter tasks..."
-          value=""
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
           spellCheck="false"
           data-ms-editor="true"
         />
@@ -43,7 +47,6 @@ const CouponFilter = (props: Props) => {
           type="button"
           aria-haspopup="dialog"
           aria-expanded="false"
-           
           data-state="closed"
         >
           <svg
@@ -67,7 +70,6 @@ const CouponFilter = (props: Props) => {
       <button
         className="items-center justify-center whitespace-nowrap font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 border border-input bg-transparent shadow-sm hover:bg-accent hover:text-accent-foreground rounded-md px-3 text-xs ml-auto hidden h-8 lg:flex"
         type="button"
-         
         aria-haspopup="menu"
         aria-expanded="false"
         data-state="closed"

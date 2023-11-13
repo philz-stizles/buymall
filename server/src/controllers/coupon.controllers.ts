@@ -3,21 +3,19 @@ import { ApiResponse, catchAsync } from '@src/utils/api.utils';
 import { CouponService } from '@src/services';
 
 export const create = catchAsync(async (req: Request, res: Response) => {
-  const { name, description, expiry, discount, isActive } = req.body;
   const newCoupon = await CouponService.create({
-    name,
-    description,
-    expiry,
-    discount,
-    isActive,
+    ...req.body,
     vendor: req.vendor,
-    createdBy: req.user
+    createdBy: req.user,
   });
   res.status(201).json(new ApiResponse('Created successfully', newCoupon));
 });
 
 export const list = catchAsync(async (req: Request, res: Response) => {
-  const coupons = await CouponService.getMany(req.query);
+  const coupons = await CouponService.getMany({
+    ...req.query,
+    vendor: req.vendor,
+  });
   res.json(new ApiResponse('Retrieved successfully', coupons));
 });
 

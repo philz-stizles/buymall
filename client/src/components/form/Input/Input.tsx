@@ -1,3 +1,4 @@
+import classNames from 'classnames';
 import { Ref, forwardRef, useImperativeHandle, useState } from 'react';
 import { IconType } from 'react-icons';
 import { IoEyeOffOutline, IoEyeOutline } from 'react-icons/io5';
@@ -40,21 +41,22 @@ const Input = forwardRef(
       } as HTMLInputElement;
     });
     const inputId =
-      id ?? (label && typeof label === 'string'
+      id ??
+      (label && typeof label === 'string'
         ? label.replace(' ', '-').toLowerCase()
         : undefined);
 
-    const inputClassName = `w-auto py-0 pt-0 ${
-      Icon ? 'pl-[40px]' : 'pl-3'
-    } outline-none border border-slate-300 rounded-md transition text-sm placeholder:text-sm focus:outline-none focus:border-indigo-500 pr-3`;
-
+    // class="flex h-10 w-full px-3 py-2 bg-background border-input placeholder:text-muted-foreground focus-visible:ring-ring ring-offset-background"
     const content = (
       <input
         autoComplete="off"
         id={inputId}
         name={name}
         disabled={disabled}
-        className={`h-[40px] ${inputClassName}`}
+        className={classNames(
+          'input h-[40px] w-auto py-0 pt-0',
+          Icon ? 'pl-[40px]' : 'pl-3'
+        )}
         type={isVisible ? 'text' : type || 'text'}
         ref={ref}
         required={required}
@@ -70,9 +72,10 @@ const Input = forwardRef(
         {label && (
           <label
             htmlFor={inputId}
-            className="block font-medium text-sm text-slate-600 mb-2"
+            className="flex gap-0.5 font-medium text-sm text-slate-900 mb-2"
           >
-            {label}
+            <span>{label}</span>
+            {required && <span className="text-rose-500 font-semibold">*</span>}
           </label>
         )}
         {Icon && (

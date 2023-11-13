@@ -8,6 +8,8 @@ import categoryRoutes from './v1/category.routes';
 import subCategoryRoutes from './v1/sub-category.routes';
 import couponRoutes from './v1/coupon.routes';
 import orderRoutes from './v1/order.routes';
+import colorRoutes from './v1/color.routes';
+import sizeRoutes from './v1/size.routes';
 import swaggerDoc from '@src/docs';
 import logger from '@src/config/logger';
 import config from '@src/config';
@@ -22,6 +24,8 @@ router.use('/vendors', vendorRoutes);
 router.use('/products', productRoutes);
 router.use('/orders', orderRoutes);
 router.use('/coupons', couponRoutes);
+router.use('/colors', colorRoutes);
+router.use('/sizes', sizeRoutes);
 
 // API documentation.
 if (config.env !== 'production') {

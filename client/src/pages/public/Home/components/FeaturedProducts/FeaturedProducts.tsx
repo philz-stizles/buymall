@@ -16,6 +16,7 @@ const FeaturedProducts = ({ subTitle }: Props) => {
             slug: 'product_1',
             price: 24.0,
             description: '',
+            ratings: [{ star: 4, postedBy: '' }],
           },
           {
             id: '2',
@@ -23,20 +24,23 @@ const FeaturedProducts = ({ subTitle }: Props) => {
             slug: 'product_2',
             description: '',
             price: 24.0,
+            ratings: [{ star: 4, postedBy: '' }],
           },
           {
             id: '3',
             title: 'Wooden House, Florida',
             slug: 'product_3',
             description: '',
-            price: 24.00,
+            price: 24.0,
+            ratings: [{ star: 4, postedBy: '' }],
           },
           {
             id: '4',
             title: 'Wooden House, Florida',
             slug: 'product_3',
             description: '',
-            price: 24.00,
+            price: 24.0,
+            ratings: [{ star: 4, postedBy: '' }],
           },
         ]
           .slice(0, 4)

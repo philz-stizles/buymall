@@ -1,11 +1,14 @@
 import { Schema, model, Types, Document, PopulatedDoc, Model } from 'mongoose';
 import { IUserDocument } from '@src/models/user.model';
+import { IFileUpload } from '@src/types';
 
 export interface ICategory extends Document {
   name: string;
   slug: string;
   description?: string;
   createdBy: PopulatedDoc<IUserDocument & Document>;
+  image: IFileUpload;
+  isPublished: boolean;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -36,10 +39,14 @@ const schema = new Schema<ICategoryDocument, ICategoryModel>(
       minlength: [2, 'Too short'],
       maxlength: [100, 'Too long'],
     },
+    image: { public_id: String, id: String, url: String },
+    isPublished: { type: Boolean, required: true, default: false },
     createdBy: { type: Types.ObjectId, ref: 'User', required: true },
   },
   { timestamps: true }
 );
+
+// schema.index({ name: 'text', description: 'text' });
 
 schema.set('toJSON', {
   virtuals: true,

@@ -1,7 +1,4 @@
 import { Request, Response } from 'express';
-import Category from '@src/models/category.model';
-import Product from '@src/models/product.model';
-import Sub from '@src/models/sub-category.model';
 import { ApiResponse, catchAsync } from '@src/utils/api.utils';
 import { CategoryService } from '@src/services';
 import { SubCategory } from '@src/models';
@@ -15,44 +12,45 @@ export const create = catchAsync(async (req: Request, res: Response) => {
 });
 
 export const list = catchAsync(async (req: Request, res: Response) => {
-  const categories = await CategoryService.list({});
+  const categories = await CategoryService.list(req.query);
   res.json(new ApiResponse('Retrieved successfully', categories));
 });
 
-export const read = async (req: Request, res: Response): Promise<Response> => {
-  const category = await Category.findOne({ slug: req.params.slug }).exec();
-  if (!category) {
-    return res.status(404).json({ status: false });
-  }
+export const read = async (req: Request, res: Response) => {
+  const category = await CategoryService.readById(req.params.id);
 
-  const products = await Product.find({
-    category,
-  })
-    .populate('category')
-    .exec();
-  // const products = await Product.find({ category }).populate('category').exec();
-
-  return res.json({ category, products });
+  res.json(new ApiResponse('Retrieved successfully', category));
 };
 
+// export const read = async (req: Request, res: Response) => {
+//   const category = await CategoryService.readById(req.params.id);
+//   if (!category) {
+//     return res.status(404).json({ status: false });
+//   }
+
+//   const products = await Product.find({
+//     category,
+//   })
+//     .populate('category')
+//     .exec();
+//   // const products = await Product.find({ category }).populate('category').exec();
+
+//   return res.json({ category, products });
+// };
+
 export const update = catchAsync(async (req: Request, res: Response) => {
-  const updated = await CategoryService.update(
-    { slug: req.params.slug },
-    req.body
-  );
-  res.json(new ApiResponse('Updated successfully', updated));
+  await CategoryService.update(req.params.id, req.body);
+  res.status(204).json(new ApiResponse('Updated successfully'));
 });
 
 export const remove = catchAsync(async (req: Request, res: Response) => {
-  const removed = await CategoryService.remove({
-    slug: req.params.slug,
-  });
-  res.json(new ApiResponse('Deleted successfully', removed));
+  await CategoryService.remove(req.params.id);
+  res.json(new ApiResponse('Deleted successfully'));
 });
 
 export const getCategorySubs = catchAsync(
   async (req: Request, res: Response) => {
-    const subs = await SubCategory.find({ parent: req.params.id });
+    const subs = await SubCategory.find({ category: req.params.id });
 
     return res.json(new ApiResponse('Retrieved successfully', subs));
   }

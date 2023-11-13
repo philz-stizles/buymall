@@ -36,13 +36,32 @@ const findBySlug = async (
 
 const list = async (
   query: FilterQuery<ISubCategoryDocument>,
-  options: QueryOptions = { lean: true }
+  options: QueryOptions = {}// = { lean: true }
 ) => {
-  // If you're executing a query and sending the results without modification to, say, an Express response,
-  // you should use lean.In general, if you do not modify the query results and do not use custom getters,
-  // you should use lean(). If you modify the query results or rely on features like getters or transforms,
-  // you should not use lean().
-  return SubCategory.find(query, {}, options).sort({ createdAt: -1 }).exec();
+  let filterQuery: any = {};
+
+  if (query.search) {
+    console.log(query.search);
+    filterQuery['$or'] = [
+      {
+        name: {
+          $regex: query.search,
+          $options: 'i',
+        },
+      },
+      {
+        description: {
+          $regex: query.search,
+          $options: 'i',
+        },
+      },
+    ];
+  }
+  const count = await SubCategory.count();
+  const subCategories = await SubCategory.find(filterQuery, {}, options).sort({
+    createdAt: -1,
+  });
+  return { data: subCategories, count };
 };
 
 const update = async (
@@ -50,17 +69,16 @@ const update = async (
   update: UpdateQuery<ISubCategoryDocument>,
   options: QueryOptions = { new: true }
 ) => {
-  const targetSubCategory = await SubCategory.findByIdAndUpdate(
+  const category = await SubCategory.findByIdAndUpdate(
     id,
     { ...update, slug: slugify(update.name) },
     options
   );
-  // { slug: req.params.slug },
 
-  if (!targetSubCategory) {
+  if (!category) {
     throw new NotFoundError('Sub Category does not exist');
   }
-  return targetSubCategory;
+  return category;
 };
 
 const archive = async (query: FilterQuery<ISubCategoryDocument>) => {

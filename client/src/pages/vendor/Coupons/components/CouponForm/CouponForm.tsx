@@ -1,27 +1,52 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Button, Input, TextArea } from '../../../../../components/ui';
 import useLocalMutation from '../../../../../hooks/use-local-mutation';
 import { stagger, useAnimate } from 'framer-motion';
+import { Coupon } from '../../../../../models/coupon';
+import moment from 'moment';
+import { Checkbox } from '../../../../../components/form';
 
 type Props = {
+  readonly?: boolean;
+  data: Coupon | null;
   isOpen?: boolean;
   onClose: () => void;
-  onReload?: () => void;
+  onReload?: (endpoint: string) => void;
 };
 
-const CouponForm = ({ onClose, onReload }: Props) => {
+const CouponForm = ({ data, onClose, onReload, readonly }: Props) => {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
-  const [discount, setDiscount] = useState(0.0);
+  const [discount, setDiscount] = useState('');
   const [expiry, setExpiry] = useState('');
-  const { isLoading, error, mutate } = useLocalMutation('/coupons', {
-    onSuccess: () => {
-      clearForm();
-      onReload && onReload();
-      onClose();
-    },
-  });
+  const [isPublished, setIsPublished] = useState(false);
+
+  const isEdit = data && data.id;
+  const { isLoading, error, mutate } = useLocalMutation(
+    `/coupons${isEdit ? `/${data.id}` : ''}`,
+    {
+      options: {
+        method: isEdit  ? 'PATCH' : 'POST'
+      },
+      onSuccess: () => {
+        clearForm();
+        console.log('onSuccess')
+        onReload && onReload('/coupons');
+        onClose();
+      },
+    }
+  );
   const [scope, animate] = useAnimate();
+
+  useEffect(() => {
+    if (data) {
+      setName(data.name);
+      setDescription(data.description);
+      setDiscount(data.discount.toString());
+      setExpiry(moment(data.expiry).format('YYYY-MM-DD'));
+      setIsPublished(data.isPublished);
+    }
+  }, [data]);
 
   const formIsValid = name.trim() !== '';
 
@@ -47,11 +72,19 @@ const CouponForm = ({ onClose, onReload }: Props) => {
 
       handleFormValidation();
 
-      mutate({ name, description, discount, expiry });
+      mutate({ name, description, discount, expiry, isPublished });
 
       // toast.success('A new product was created successful');
     },
-    [description, handleFormValidation, mutate, name, discount, expiry]
+    [
+      handleFormValidation,
+      mutate,
+      name,
+      description,
+      discount,
+      expiry,
+      isPublished,
+    ]
   );
 
   return (
@@ -63,6 +96,7 @@ const CouponForm = ({ onClose, onReload }: Props) => {
     >
       {error && <small>{error.message}</small>}
       <Input
+        readOnly={readonly}
         id="name"
         label="Code"
         disabled={isLoading}
@@ -78,6 +112,7 @@ const CouponForm = ({ onClose, onReload }: Props) => {
         required
         value={description}
         onChange={(e) => setDescription(e.target.value)}
+        readOnly={readonly}
       />
 
       <Input
@@ -85,13 +120,14 @@ const CouponForm = ({ onClose, onReload }: Props) => {
         min={0}
         max={1}
         step={0.01}
-        type='number'
-        label="Discount"
+        type="number"
+        label="Discount (%)"
         disabled={isLoading}
         required
         value={discount}
-        onChange={(e) => setDiscount(Number(e.target.value))}
+        onChange={(e) => setDiscount(e.target.value)}
         placeholder="23.49"
+        readOnly={readonly}
       />
 
       <Input
@@ -102,10 +138,14 @@ const CouponForm = ({ onClose, onReload }: Props) => {
         required
         value={expiry}
         onChange={(e) => setExpiry(e.target.value)}
-        placeholder="23.49"
+        readOnly={readonly}
       />
 
-      <div></div>
+      <Checkbox
+        label="Is Published?"
+        checked={isPublished}
+        onChange={(e) => setIsPublished(e.target.checked)}
+      />
 
       <div className="flex justify-end items-center gap-3 pt-2">
         <Button
@@ -120,7 +160,7 @@ const CouponForm = ({ onClose, onReload }: Props) => {
           size="md"
           loading={isLoading}
           type="submit"
-          label="Save"
+          label={isEdit ? 'Edit Coupon' : 'Add coupon'}
         />
       </div>
     </form>

@@ -35,7 +35,7 @@ const MenuTreeItem = ({
   }`;
   const itemContent = (
     <>
-      {Icon && <Icon size={18} />}
+      {Icon && <Icon className='text-indigo-600' size={18} />}
       {title}
       {hasChildren &&
         (showChildren ? <IoCaretDownSharp /> : <IoCaretForwardSharp />)}

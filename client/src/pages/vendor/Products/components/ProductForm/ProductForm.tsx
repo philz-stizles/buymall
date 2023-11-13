@@ -113,7 +113,7 @@ const ProductForm = ({ onClose, onReload }: Props) => {
       ref={scope}
     >
       {error && <small>{error.message}</small>}
-      <FileUpload files={images} setFiles={setImages} />
+      <FileUpload title='Upload an Image' files={images} setFiles={setImages} />
       <Input
         id="title"
         label="Name"

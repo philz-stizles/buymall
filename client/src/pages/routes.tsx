@@ -1,7 +1,7 @@
 import { createBrowserRouter } from 'react-router-dom';
 import Home from './public/Home/Home';
 import Privacy from './public/Privacy/Privacy';
-import React, { Suspense } from 'react';
+import React from 'react';
 import RootLayout from '../components/layouts/RootLayout';
 import Error from './public/Error/Error';
 import Auth from './public/Auth/Auth';
@@ -11,22 +11,15 @@ import {
   publicRouteLoader,
 } from '../utils/auth';
 import DashboardLayout from '../components/layouts/DashboardLayout';
-import Categories from './admin/Categories/Categories';
-import SubCategories from './admin/SubCategories/SubCategories';
 import OverviewPage from './admin/Overview/Overview';
-import AdminUsersPage from './admin/Users/Users';
-import AdminVendorsPage from './admin/Vendors/Vendors';
-import {
-  AdminCustomersPage,
-  AdminOrdersPage,
-  AdminProductsPage,
-  AdminTransactionsPage,
-} from './admin';
+
 import {
   VendorCouponsPage,
   VendorProductsPage,
   VendorUsersPage,
 } from './vendor';
+import { PageLoader } from '../components/ui';
+import adminRoutes from './admin';
 
 // Lazy loaded routes.
 const Products = React.lazy(() => import('./public/Products/Products'));
@@ -41,13 +34,7 @@ const routes = createBrowserRouter([
     id: 'public',
     path: '/',
     element: (
-      <React.Suspense
-        fallback={
-          <div className="w-full h-screen flex justify-center items-center">
-            Loading...
-          </div>
-        }
-      >
+      <React.Suspense fallback={<PageLoader />}>
         <RootLayout />
       </React.Suspense>
     ),
@@ -83,13 +70,7 @@ const routes = createBrowserRouter([
       {
         path: '/vendor',
         element: (
-          <React.Suspense
-            fallback={
-              <div className="w-full h-screen flex justify-center items-center">
-                Loading...
-              </div>
-            }
-          >
+          <React.Suspense fallback={<PageLoader />}>
             <Vendor />
           </React.Suspense>
         ),
@@ -104,62 +85,19 @@ const routes = createBrowserRouter([
   {
     path: '/admin',
     element: (
-      <React.Suspense
-        fallback={
-          <div className="w-full h-screen flex justify-center items-center">
-            Loading...
-          </div>
-        }
-      >
+      <React.Suspense fallback={<PageLoader />}>
         <DashboardLayout />
       </React.Suspense>
     ),
     loader: privateRouteLoader,
-    children: [
-      {
-        index: true,
-        element: <OverviewPage />,
-      },
-      {
-        path: 'categories',
-        element: <Categories />,
-      },
-      {
-        path: 'sub-categories',
-        element: <SubCategories />,
-      },
-      {
-        path: 'users',
-        element: <AdminUsersPage />,
-      },
-      {
-        path: 'vendors',
-        element: <AdminVendorsPage />,
-      },
-      {
-        path: 'products',
-        element: <AdminProductsPage />,
-      },
-      {
-        path: 'customers',
-        element: <AdminCustomersPage />,
-      },
-      {
-        path: 'transactions',
-        element: <AdminTransactionsPage />,
-      },
-      {
-        path: 'orders',
-        element: <AdminOrdersPage />,
-      },
-    ],
+    children: adminRoutes,
   },
   {
     path: '/vendor',
     element: (
-      <Suspense fallback={<p>Loading products ....</p>}>
+      <React.Suspense fallback={<PageLoader />}>
         <DashboardLayout />
-      </Suspense>
+      </React.Suspense>
     ),
     loader: privateRouteLoader,
     children: [

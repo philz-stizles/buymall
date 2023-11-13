@@ -52,19 +52,21 @@ const Button = memo(
       const variants: { [key: string]: string } = {
         flat: `border-none`,
         black: `bg-slate-950 border-slate-950 text-white`,
-        outlined: `border-slate-300 bg-white text-slate-600`,
+        outlined: `border-slate-300 bg-white text-slate-600 ring-1 ring-inset ring-slate-300 hover:bg-slate-50`,
         white: `text-black bg-white`,
         green: `text-white bg-green-600 ${isHoverable && 'hover:bg-green-700'}`,
         primary: `bg-[#115DFC] border-[#115DFC] text-white ${
           isHoverable && 'hover:bg-[#115DFC]'
         }`,
-        danger: `text-white bg-red-600 ${isHoverable && 'hover:bg-red-700'}`,
+        danger: `text-white bg-red-600 border-red-600 ${
+          isHoverable && 'hover:bg-red-700'
+        }`,
         secondary: `text-indigo-700 bg-indigo-100 ${
           isHoverable && 'hover:bg-indigo-200'
         }`,
       };
       return classNames(
-        'flex justify-center items-center gap-1 rounded-md outline-none border-2 cursor-pointer transition disabled:pointer-events-none disabled:opacity-50',
+        'flex justify-center items-center gap-1 rounded-md outline-none border shadow-sm cursor-pointer transition disabled:pointer-events-none disabled:opacity-50',
         sizeClass,
         variants[variant],
         expanded && 'w-full',
@@ -74,9 +76,13 @@ const Button = memo(
 
     const content = (
       <>
-        {IconLeft && <IconLeft size={size === 'sm' ? 18 : 20} />}
+        {IconLeft && (
+          <IconLeft className="-ml-1" size={size === 'sm' ? 18 : 20} />
+        )}
         <span> {label || children}</span>
-        {IconRight && <IconRight size={size === 'sm' ? 18 : 20} />}
+        {IconRight && (
+          <IconRight className="-mr-1" size={size === 'sm' ? 18 : 20} />
+        )}
       </>
     );
 

@@ -77,38 +77,48 @@ const AppBarChart = ({ title, className }: Props) => {
   return (
     <ChartWrapper title={title} className={className}>
       <ResponsiveContainer width="100%" height={270}>
-      <BarChart
-        title="Hello World"
-        // width={730}
-        // height={300}
-        data={data}
-        margin={{
-          top: 5,
-          right: 30,
-          // left: 20,
-          bottom: 5,
-        }}
-      >
-        <CartesianGrid vertical={false} strokeDasharray="3 3" />
-        <XAxis dataKey="name" />
-        <YAxis />
-        <Tooltip />
-        {/* <Legend /> */}
-        <Bar
-          radius={[4, 4, 0, 0]}
-          barSize={16}
-          dataKey="pv"
-          fill="#6741d9"
-          activeBar={<Rectangle fill="pink" stroke="blue" />}
-        />
-        <Bar
-          radius={[4, 4, 0, 0]}
-          barSize={16}
-          dataKey="uv"
-          fill="#f3f0ff"
-          activeBar={<Rectangle fill="gold" stroke="purple" />}
-        />
-      </BarChart>
+        <BarChart
+          title="Hello World"
+          // width={730}
+          // height={300}
+          data={data}
+          margin={{
+            top: 5,
+            right: 30,
+            // left: 20,
+            bottom: 5,
+          }}
+        >
+          <CartesianGrid vertical={false} strokeDasharray="3 3" />
+          <XAxis
+            fontSize={12}
+            tickLine={false}
+            axisLine={false}
+            dataKey="name"
+          />
+          <YAxis
+            fontSize={12}
+            tickLine={false}
+            axisLine={false}
+            tickFormatter={(value) => `$${value}`}
+          />
+          <Tooltip />
+          {/* <Legend /> */}
+          <Bar
+            radius={[4, 4, 0, 0]}
+            barSize={16}
+            dataKey="pv"
+            fill="#6741d9"
+            activeBar={<Rectangle fill="pink" stroke="blue" />}
+          />
+          <Bar
+            radius={[4, 4, 0, 0]}
+            barSize={16}
+            dataKey="uv"
+            fill="#f3f0ff"
+            activeBar={<Rectangle fill="gold" stroke="purple" />}
+          />
+        </BarChart>
       </ResponsiveContainer>
     </ChartWrapper>
   );

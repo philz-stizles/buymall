@@ -1,6 +1,5 @@
 import { IoDownload } from 'react-icons/io5';
 import { useLocalQuery } from '../../../hooks';
-import { baseUrl } from '../../../utils/constants';
 import { Product } from '../../../models/product';
 import { Fragment } from 'react';
 import { Button } from '../../../components/ui';
@@ -12,7 +11,7 @@ const Products = () => {
     isLoading,
     error,
     reload,
-  } = useLocalQuery<Product[]>(`${baseUrl}/products`, []);
+  } = useLocalQuery<Product[]>('/products', []);
 
   return (
     <Fragment>

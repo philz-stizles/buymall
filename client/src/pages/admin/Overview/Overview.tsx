@@ -1,5 +1,5 @@
 import classes from './Overview.module.css';
-import { IoNotifications } from 'react-icons/io5';
+import { IoNotifications, IoPeople, IoPeopleOutline } from 'react-icons/io5';
 import StatsCard from '../../../components/cards/StatsCard/StatsCard';
 import { AppAreaChart, AppBarChart, AppDoughnut } from '../../../components/charts';
 import Orders from './Orders';
@@ -12,13 +12,13 @@ const OverviewPage = () => {
   // const date = `${fullMonth} ${now.getDate()}, ${now.getFullYear()}`;
 
   return (
-    <div className="py-10 flex flex-col gap-8">
+    <div className="py-6 flex flex-col gap-4">
       <div className="grid grid-cols-4 gap-4">
         <StatsCard
           color="#20c997"
-          title="Available Balance"
-          figure="$14,823.20"
-          icon={IoNotifications}
+          title="Total Vendors"
+          figure="+3250"
+          icon={IoPeopleOutline}
           meta="8.0%"
         />
         <StatsCard

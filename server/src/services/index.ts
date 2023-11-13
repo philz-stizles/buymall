@@ -1,9 +1,12 @@
-export { default as AuthService } from './features/auth.service'
-export { default as UserService } from './features/user.service'
-export { default as VendorService } from './features/vendor.service'
-export { default as CategoryService } from './features/category.service'
-export { default as SubCategoryService } from './features/sub-category.service'
-export { default as CouponService } from './features/coupon.service'
-export { default as ProductService } from './features/product.service'
+export { default as AuthService } from './features/auth.service';
+export { default as UserService } from './features/user.service';
+export { default as VendorService } from './features/vendor.service';
+export { default as CategoryService } from './features/category.service';
+export { default as SubCategoryService } from './features/sub-category.service';
+export { default as CouponService } from './features/coupon.service';
+export { default as ProductService } from './features/product.service';
+export { default as ColorService } from './features/color.service';
+export { default as SizeService } from './features/size.service';
 export { default as OtpService } from './otp.service';
 export { default as TokenService } from './token.service';
+export * as CloudinaryService from './cloudinary/cloudinary.services';

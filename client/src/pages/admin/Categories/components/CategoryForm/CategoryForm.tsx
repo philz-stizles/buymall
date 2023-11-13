@@ -1,25 +1,48 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Button, Input, TextArea } from '../../../../../components/ui';
 import useLocalMutation from '../../../../../hooks/use-local-mutation';
 import { stagger, useAnimate } from 'framer-motion';
+import { Category } from '../../../../../models/category';
+import { Checkbox, ImageSelector } from '../../../../../components/form';
 
 type Props = {
+  readonly?: boolean;
+  data: Category | null;
   isOpen?: boolean;
   onClose: () => void;
-  onReload?: () => void;
+  onReload?: (endpoint: string) => void;
 };
 
-const CategoryForm = ({ onClose, onReload }: Props) => {
+const CategoryForm = ({ data, onClose, onReload, readonly }: Props) => {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
-  const { isLoading, error, mutate } = useLocalMutation('/categories', {
-    onSuccess: () => {
-      clearForm();
-      onReload && onReload();
-      onClose();
-    },
-  });
+  const [image, setImage] = useState('');
+  const [isPublished, setIsPublished] = useState(false);
+
+  const isEdit = data && data.id;
+  const { isLoading, error, mutate } = useLocalMutation(
+    `/categories${isEdit ? `/${data.id}` : ''}`,
+    {
+      options: {
+        method: isEdit ? 'PATCH' : 'POST',
+      },
+      onSuccess: () => {
+        clearForm();
+        onReload && onReload('/categories');
+        onClose();
+      },
+    }
+  );
   const [scope, animate] = useAnimate();
+
+  useEffect(() => {
+    if (data) {
+      setName(data.name);
+      setDescription(data.description);
+      setImage(data.image?.url ?? '');
+      setIsPublished(data.isPublished);
+    }
+  }, [data]);
 
   const formIsValid = name.trim() !== '';
 
@@ -45,11 +68,11 @@ const CategoryForm = ({ onClose, onReload }: Props) => {
 
       handleFormValidation();
 
-      mutate({ name, description });
+      mutate({ name, description, isPublished, image });
 
-      // toast.success('A new category was created successful');
+      // toast.success('A new product was created successful');
     },
-    [description, handleFormValidation, mutate, name]
+    [handleFormValidation, mutate, name, description, image, isPublished]
   );
 
   return (
@@ -60,14 +83,18 @@ const CategoryForm = ({ onClose, onReload }: Props) => {
       ref={scope}
     >
       {error && <small>{error.message}</small>}
+
+      <ImageSelector selected={image} onChange={(uri) => setImage(uri)} />
+
       <Input
+        readOnly={readonly}
         id="name"
         label="Name"
         disabled={isLoading}
         required
         value={name}
         onChange={(e) => setName(e.target.value)}
-        placeholder="E.g. DevOps"
+        placeholder="E.g. BUYM-COUP-0000"
       />
       <TextArea
         id="description"
@@ -76,7 +103,17 @@ const CategoryForm = ({ onClose, onReload }: Props) => {
         required
         value={description}
         onChange={(e) => setDescription(e.target.value)}
+        readOnly={readonly}
       />
+
+      <Checkbox
+        label="Is Published?"
+        outlined
+        description="This category will be available in the store."
+        checked={isPublished}
+        onChange={(e) => setIsPublished(e.target.checked)}
+      />
+
       <div className="flex justify-end items-center gap-3 pt-2">
         <Button
           size="md"
@@ -90,7 +127,7 @@ const CategoryForm = ({ onClose, onReload }: Props) => {
           size="md"
           loading={isLoading}
           type="submit"
-          label="Create"
+          label={isEdit ? 'Save Changes' : 'Create'}
         />
       </div>
     </form>

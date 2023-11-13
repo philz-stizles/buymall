@@ -4,12 +4,7 @@ import { ICategoryDocument } from './category.model';
 import { IUserDocument } from '@src/models/user.model';
 import { ISubCategoryDocument } from './sub-category.model';
 import { IVendorDocument } from './vendor.model';
-
-interface IFileUpload {
-  public_id?: string;
-  id: string;
-  url: string;
-}
+import { IFileUpload } from '@src/types';
 
 interface IUserRating {
   star: number;

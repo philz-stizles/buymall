@@ -8,8 +8,8 @@ type Props = {
 
 const EmptyState = ({ title, description, icon: Icon }: Props) => {
   return (
-    <div className="flex flex-col justify-center items-center w-full h-[50vh]">
-      {Icon && <Icon className="mb-6 text-indigo-300" size={64} />}
+    <div className="flex flex-col justify-center items-center w-full py-12 bg-white">
+      {Icon && <Icon className="mb-4 text-indigo-300" size={48} />}
 
       <h2 className="text-xl font-semibold mb-2 text-center text-slate-600">
         {title}

@@ -1,5 +1,6 @@
 export { default as Logo }  from "./Logo/Logo";
 export { default as Button } from './Button/Button';
+export { default as IconButton } from './IconButton/IconButton';
 export { default as Input }  from "../form/Input/Input";
 export { default as TextArea } from '../form/TextArea/TextArea';
 export { default as Badge }  from "./Badge/Badge";
@@ -8,6 +9,14 @@ export { default as Card }  from "./Card";
 export { default as Heading }  from "./Heading/Heading";
 export { default as EmptyState }  from "./EmptyState/EmptyState";
 export { default as Modal } from './Modal/Modal'
+export { default as Alert } from './Alert/Alert';
 export { default as AppIcon } from './AppIcon/AppIcon';
 export { default as Pagination } from './Pagination/Pagination';
 export { default as FileUpload } from './FileUpload/FileUpload';
+export { default as Table } from './Table/Table';
+export { default as TableFilter } from './TableFilter/TableFilter';
+export { default as Currency } from './Currency/Currency';
+export { default as Ratings } from './Ratings/Ratings';
+export { default as DashboardHeading } from './DashboardHeading/DashboardHeading';
+export { default as PageLoader } from './PageLoader/PageLoader';
+export { default as Divider } from './Divider/Divider';

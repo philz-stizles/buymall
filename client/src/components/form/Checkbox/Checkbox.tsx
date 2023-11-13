@@ -1,10 +1,13 @@
+import classNames from 'classnames';
 import React from 'react';
 
 type Props = React.InputHTMLAttributes<HTMLInputElement> & {
   label?: string;
+  description?: string;
+  outlined?: boolean;
 };
 
-const Checkbox = ({ label, ...rest }: Props) => {
+const Checkbox = ({ label, description, outlined = false, ...rest }: Props) => {
   const inputId =
     label && typeof label === 'string'
       ? label.replace(' ', '-').toLowerCase()
@@ -15,10 +18,20 @@ const Checkbox = ({ label, ...rest }: Props) => {
   return label ? (
     <label
       htmlFor={inputId}
-      className="inline-flex items-center gap-2 font-medium text-sm text-slate-600 mb-2"
+      className={classNames(
+        'inline-flex items-start gap-2',
+        outlined && 'border rounded-md p-4'
+      )}
     >
       {checkboxInput}
-      {label}
+      <span className="flex flex-col justify-start gap-1.5 leading-none text-sm">
+        <span className="font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+          {label}
+        </span>
+        {description && (
+          <span className="text-muted-foreground">{description}</span>
+        )}
+      </span>
     </label>
   ) : (
     checkboxInput

@@ -39,13 +39,11 @@ const Modal = ({
         }}
       >
         {/* Modal header */}
-        <div className="flex flex-col space-y-1.5 text-center sm:text-left">
+        <div className="flex flex-col space-y-2 text-center sm:text-left text-slate-800">
           <h2 className="text-lg font-semibold leading-none tracking-tight">
             {title}
           </h2>
-          {subTitle && (
-            <p className="text-sm text-muted-foreground">{subTitle}</p>
-          )}
+          {subTitle && <p className="text-sm text-slate-500">{subTitle}</p>}
         </div>
 
         {/* Modal close button */}

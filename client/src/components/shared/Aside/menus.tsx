@@ -1,12 +1,18 @@
-import { IoHelpCircleOutline, IoMenuOutline } from 'react-icons/io5';
+import { IoHelpCircleOutline, IoMenuOutline, IoPeopleCircleOutline } from 'react-icons/io5';
 import {
+  MdCategory,
   MdOutlineCategory,
   MdOutlineDashboard,
   MdOutlineSettings,
   MdPeopleOutline,
 } from 'react-icons/md';
 import { FaProductHunt } from 'react-icons/fa';
+import {  FaPeopleRoof } from 'react-icons/fa6';
 import { MenuProps } from '../../ui/MenuTree/MenuTree';
+import { BiSolidShoppingBags } from 'react-icons/bi';
+import { GrTransaction } from 'react-icons/gr';
+import { RxSize } from 'react-icons/rx';
+import { IoMdColorFill } from 'react-icons/io';
 
 export const mainMenus: { [key: string]: MenuProps[] } = {
   admin: [
@@ -22,8 +28,18 @@ export const mainMenus: { [key: string]: MenuProps[] } = {
     },
     {
       title: 'Sub Categories',
-      icon: MdOutlineCategory,
+      icon: MdCategory,
       to: '/admin/sub-categories',
+    },
+    {
+      title: 'Size',
+      icon: RxSize,
+      to: '/admin/sizes',
+    },
+    {
+      title: 'Color',
+      icon: IoMdColorFill,
+      to: '/admin/colors',
     },
   ],
   vendor: [
@@ -50,7 +66,7 @@ export const menus: { [key: string]: MenuProps[] } = {
   admin: [
     {
       title: 'Orders',
-      icon: IoMenuOutline,
+      icon: BiSolidShoppingBags,
       to: '/admin/orders',
       children: [],
     },
@@ -61,19 +77,19 @@ export const menus: { [key: string]: MenuProps[] } = {
     },
     {
       title: 'Customers',
-      icon: MdPeopleOutline,
+      icon: FaPeopleRoof,
       to: '/admin/customers',
       children: [],
     },
     {
       title: 'Vendors',
-      icon: IoMenuOutline,
+      icon: IoPeopleCircleOutline,
       to: '/admin/vendors',
       children: [],
     },
     {
       title: 'Transactions',
-      icon: IoMenuOutline,
+      icon: GrTransaction,
       to: '/admin/transactions',
       children: [],
     },
@@ -104,7 +120,7 @@ export const otherMenus: { [key: string]: MenuProps[] } = {
   admin: [
     {
       title: 'Users',
-      icon: MdOutlineSettings,
+      icon: MdPeopleOutline,
       to: '/admin/users',
       children: [],
     },

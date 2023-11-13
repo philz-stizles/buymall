@@ -1,31 +1,65 @@
-import { IoDownload } from 'react-icons/io5';
+import { useCallback, useState } from 'react';
+import { IoAdd } from 'react-icons/io5';
+import {
+  Button,
+  DashboardHeading,
+  PageLoader,
+  TableFilter,
+} from '../../../components/ui';
+import { Transaction } from '../../../models/transaction';
+import TransactionTable from './components/TransactionTable/TransactionTable';
 import { useLocalQuery } from '../../../hooks';
-import { baseUrl } from '../../../utils/constants';
-import { Transaction } from './../../../models/transaction';
-import { Fragment } from 'react';
-import { Button } from '../../../components/ui';
 
 const Transactions = () => {
-  const {
-    data: transactions,
-    isLoading,
-    error,
-    reload,
-  } = useLocalQuery<Transaction[]>(`${baseUrl}/transactions`, []);
+  const [showModal, setShowModal] = useState(false);
+
+  const [view, setView] = useState(false);
+  const [selectedTransaction, setSelectedTransaction] =
+    useState<Transaction | null>(null);
+  const { data, isLoading, error, reload } = useLocalQuery<{
+    count: number;
+    transactions: Transaction[];
+  }>('/transactions', { count: 0, transactions: [] });
+
+  const handleView = useCallback(async (transaction: Transaction) => {
+    setSelectedTransaction(transaction);
+    setView(true);
+    setShowModal(true);
+  }, []);
+
   return (
-    <Fragment>
-      <div className="flex items-center justify-between space-y-2 py-8">
-        <div>
-          <h2 className="text-2xl font-bold tracking-tight mb-2">Transactions</h2>
-          <p className="text-muted-foreground">
-            Here's a list of your tasks for this month!
-          </p>
-        </div>
-        <div className="flex items-center space-x-2">
-          <Button label="Download" iconLeft={IoDownload} onClick={() => {}} />
-        </div>
+    <div className="flex-1 flex flex-col gap-6 py-8 pt-4">
+      <div className="flex items-center justify-between">
+        <DashboardHeading
+          title={`Transactions (${data.count})`}
+          description="Here a list of your tasks for this month!"
+        />
+
+        <Button
+          label="Add New"
+          iconLeft={IoAdd}
+          onClick={() => setShowModal(true)}
+        />
       </div>
-    </Fragment>
+
+      <TableFilter
+        onFilter={useCallback(
+          async (searchValue: string) => {
+            await reload(`/transactions?search=${searchValue}`);
+          },
+          [reload]
+        )}
+      />
+
+      {isLoading && <PageLoader />}
+
+      {!isLoading && !error && (
+        <TransactionTable
+          transactions={data.transactions}
+          onView={handleView}
+        />
+      )}
+    </div>
   );
 };
 

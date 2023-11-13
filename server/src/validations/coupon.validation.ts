@@ -6,6 +6,7 @@ const create = {
     description: Joi.string(),
     expiry: Joi.string().required(),
     discount: Joi.number().required(),
+    isPublished: Joi.boolean().required().default(false),
   }),
 };
 
@@ -18,6 +19,7 @@ const update = {
     description: Joi.string(),
     expiry: Joi.string().required(),
     discount: Joi.number().required(),
+    isPublished: Joi.boolean().required()
   }),
 };
 

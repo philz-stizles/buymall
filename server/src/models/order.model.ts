@@ -17,7 +17,7 @@ export interface OrderDocument extends Document {
   updatedAt: string;
 }
 
-const orderSchema = new Schema(
+const schema = new Schema(
   {
     products: [
       {
@@ -43,4 +43,12 @@ const orderSchema = new Schema(
   { timestamps: true }
 );
 
-export default model<OrderDocument>('Order', orderSchema);
+schema.set('toJSON', {
+  virtuals: true,
+  versionKey: false,
+  transform: (_, ret) => {
+    delete ret._id;
+  },
+});
+
+export default model<OrderDocument>('Order', schema);

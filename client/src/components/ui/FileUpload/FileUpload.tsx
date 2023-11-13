@@ -1,20 +1,26 @@
-import { removeImage } from '../../../actions/product';
 import { resizeFile } from '../../../utils/file.utils';
 import Badge from '../Badge/Badge';
 import Avatar from '../Avatar/Avatar';
 import { useLocalMutation } from '../../../hooks';
 import { ChangeEvent } from 'react';
 import { IoFileTray } from 'react-icons/io5';
+import { LuImagePlus } from 'react-icons/lu';
 
 type UploadedImage = { public_id: string; url: string };
 
 type Props = {
+  title?: string;
   files: UploadedImage[];
   setFiles: (values: any) => void;
   setIsLoading?: (isLoading: boolean) => void;
 };
 
-const FileUpload = ({ files, setFiles, setIsLoading }: Props) => {
+const FileUpload = ({
+  title = 'Choose File',
+  files,
+  setFiles,
+  setIsLoading,
+}: Props) => {
   const { mutate: uploadFile } = useLocalMutation('/products/upload-file', {
     onSuccess: (data: any) => {
       setIsLoading && setIsLoading(false);
@@ -25,11 +31,13 @@ const FileUpload = ({ files, setFiles, setIsLoading }: Props) => {
       setIsLoading && setIsLoading(false);
     },
   });
+
   const { mutate: removeFile } = useLocalMutation('/products/remove-file', {
     onError: (error: any) => {
       setIsLoading && setIsLoading(false);
     },
   });
+
   const handleFileResizeAndUpload = async (
     e: ChangeEvent<HTMLInputElement>
   ) => {
@@ -78,8 +86,8 @@ const FileUpload = ({ files, setFiles, setIsLoading }: Props) => {
         ))}
       </div>
 
-      <label className="border inline-flex justify-center items-center self-start gap-1.5 border-slate-200 text-slate-600 shadow-sm rounded-lg p-2 text-sm font-medium cursor-pointer">
-        Choose File <IoFileTray size={18} />
+      <label className="border inline-flex flex-row-reverse justify-center items-center self-start gap-1.5 border-slate-200 text-slate-600 shadow-sm rounded-lg p-2 text-sm font-medium cursor-pointer">
+        {title} <LuImagePlus size={18} />
         <input
           type="file"
           multiple

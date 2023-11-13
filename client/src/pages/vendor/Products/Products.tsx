@@ -5,7 +5,6 @@ import { Product } from '../../../models/product';
 import ProductCreateModal from './components/ProductCreateModal/ProductCreateModal';
 import useLocalQuery from '../../../hooks/use-local-query';
 import Loader from '../../../components/ui/Loader/Loader';
-import { baseUrl } from '../../../utils/constants';
 
 const Products = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -14,7 +13,7 @@ const Products = () => {
     isLoading,
     error,
     reload,
-  } = useLocalQuery<Product[]>(`${baseUrl}/products`, []);
+  } = useLocalQuery<Product[]>('/products', []);
 
   return (
     <Fragment>

@@ -5,3 +5,5 @@ export { default as SubCategory } from './sub-category.model';
 export { default as Product } from './product.model';
 export { default as Coupon } from './coupon.model';
 export { default as Cart } from './cart.model';
+export { default as Color } from './color.model';
+export { default as Size } from './size.model';

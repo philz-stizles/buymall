@@ -1,80 +1,47 @@
 import { MdDelete, MdDeleteOutline, MdModeEditOutline } from 'react-icons/md';
 import './Table.css';
+import { ColumnProps } from '../../../types';
 
-type Props = {
-  title?: string;
-  columns: string[];
-  rows: any[];
+type Props<T> = {
+  columns: ColumnProps<T>[];
+  rows?: T[];
 };
 
-const Table = ({ title, columns, rows }: Props) => {
+const Table = <T,>({ columns, rows }: Props<T>) => {
+  const renderTHead = () => (
+    <thead className="[&_tr]:border-b">
+      {columns.map((column, index) => (
+        <th
+          key={`headCell-${index}`}
+          className="h-10 px-2 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]"
+        >
+          {column.title}
+        </th>
+      ))}
+    </thead>
+  );
+
+  const renderTBody = () => (
+    <tbody>
+      {rows?.map((row, index) => (
+        // bg-white px-6 p-4
+        // border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted
+        <tr key={index} className="rounded-lg border-b border-slate-200 transition-colors bg-white hover:bg-indigo-50 data-[state=selected]:bg-muted text-slate-600"></tr>
+      ))}
+    </tbody>
+  );
+
   return (
-    <div className="w-full rounded-lg bg-white p-6 flex-1">
-      <div className="px-4 flex items-center">
-        {title && <h3 className="font-medium">{title}</h3>}
-        <div className=""></div>
+    <div className="overflow-x-auto">
+      <div className="min-w-screen flex justify-center bg-gray-100 font-sans overflow-hidden">
+        <div className="w-full">
+          <div className="bg-white shadow-md rounded"></div>
+          <table className="min-w-max w-full table-auto caption-bottom text-sm">
+            {renderTHead()}
+            {renderTBody()}
+          </table>
+        </div>
       </div>
-      <div className="">
-        <table className="table-auto w-full max-w-full text-left">
-          <thead>
-            <tr>
-              <th className="px-2 block whitespace-nowrap py-4 rounded-tl-lg rounded-bl-lg text-slate-600 bg-slate-50 border-y border-l border-slate-200 transition">
-                <div className="inline-flex relative flex-col">
-                  <label>
-                    <span className="relative cursor-pointer">
-                      <input
-                        type="checkbox"
-                        className="absolute top-0 bottom-0 left-0 right-0 cursor-pointer w-full h-full z-[1] opacity-0"
-                      />
-                      <span className="bg-white block relative top-0 left-0 h-4 w-4 rounded-sm border border-collapse border-slate-200 transition"></span>
-                      {/*   direction: ltr; */}
-                    </span>
-                  </label>
-                </div>
-              </th>
-              {columns.map((column: string) => (
-                <th
-                  className="p-4 text-sm font-medium text-slate-600 bg-slate-50 border-y last-of-type:border-r border-slate-200 last-of-type:block last-of-type:rounded-tr-lg last-of-type:rounded-br-lg transition last-of-type:text-right"
-                  key={column}
-                >
-                  {column}
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody className="">
-            {/* {rows.length <= 0 && <div><img src={EmptyImage} alt="Empty" /></div>} */}
-            {rows.map((row: any) => (
-              <tr key={row.id} className="text-sm">
-                <td className="px-2 inline-flex relative flex-col">
-                  <label>
-                    <span className="relative cursor-pointer">
-                      <input
-                        type="checkbox"
-                        className="absolute top-0 bottom-0 left-0 right-0 cursor-pointer w-full h-full z-[1] opacity-0"
-                      />
-                      <span className="bg-white block relative top-0 left-0 h-4 w-4 rounded-sm border border-collapse border-slate-200 transition"></span>
-                      {/*   direction: ltr; */}
-                    </span>
-                  </label>
-                </td>
-                <td className="p-4">
-                  <span className="block">{row.name}</span>
-                </td>
-                <td className="p-4">{row.description}</td>
-                <td className="p-4">{row.createdAt}</td>
-                <td className="p-4">{row.name}</td>
-                <div className="p-4 flex justify-end gap-4 items-center">
-                  <MdModeEditOutline size={18} />
-                  <MdDelete size={18} />
-                  <MdDeleteOutline size={20} />
-                </div>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-      <div></div>
     </div>
   );
 };

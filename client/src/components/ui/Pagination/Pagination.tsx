@@ -1,16 +1,21 @@
-import React from 'react';
+import IconButton from '../IconButton/IconButton';
+import {
+  MdKeyboardArrowLeft,
+  MdOutlineKeyboardDoubleArrowLeft,
+} from 'react-icons/md';
 
 type Props = {};
 
-const Pagination = (props: Props) => {
+const Pagination = ({}: Props) => {
   return (
     <div className=" flex items-center justify-between">
-      <div className="flex-1 text-sm text-muted-foreground">
+      {/* <div className="flex-1 text-sm text-muted-foreground">
         0 of 100 row(s) selected.
-      </div>
-      <div className="flex items-center space-x-6 lg:space-x-8">
+      </div> */}
+      <div className="flex-1 flex justify-between items-center space-x-6 lg:space-x-8">
         <div className="flex items-center space-x-2">
           <p className="text-sm font-medium">Rows per page</p>
+
           <button
             type="button"
             role="combobox"
@@ -40,52 +45,21 @@ const Pagination = (props: Props) => {
             </svg>
           </button>
         </div>
-        <div className="flex w-[100px] items-center justify-center text-sm font-medium">
+        {/* <div className="flex w-[100px] items-center justify-center text-sm font-medium">
           Page 1 of 10
-        </div>
+        </div> */}
         <div className="flex items-center space-x-2">
-          <button
-            className="items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 border border-input bg-transparent shadow-sm hover:bg-accent hover:text-accent-foreground hidden h-8 w-8 p-0 lg:flex"
-            disabled
-          >
-            <span className="sr-only">Go to first page</span>
-            <svg
-              width="15"
-              height="15"
-              viewBox="0 0 15 15"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-4 w-4"
-            >
-              <path
-                d="M6.85355 3.85355C7.04882 3.65829 7.04882 3.34171 6.85355 3.14645C6.65829 2.95118 6.34171 2.95118 6.14645 3.14645L2.14645 7.14645C1.95118 7.34171 1.95118 7.65829 2.14645 7.85355L6.14645 11.8536C6.34171 12.0488 6.65829 12.0488 6.85355 11.8536C7.04882 11.6583 7.04882 11.3417 6.85355 11.1464L3.20711 7.5L6.85355 3.85355ZM12.8536 3.85355C13.0488 3.65829 13.0488 3.34171 12.8536 3.14645C12.6583 2.95118 12.3417 2.95118 12.1464 3.14645L8.14645 7.14645C7.95118 7.34171 7.95118 7.65829 8.14645 7.85355L12.1464 11.8536C12.3417 12.0488 12.6583 12.0488 12.8536 11.8536C13.0488 11.6583 13.0488 11.3417 12.8536 11.1464L9.20711 7.5L12.8536 3.85355Z"
-                fill="currentColor"
-                fillRule="evenodd"
-                clipRule="evenodd"
-              ></path>
-            </svg>
-          </button>
-          <button
-            className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 border border-input bg-transparent shadow-sm hover:bg-accent hover:text-accent-foreground h-8 w-8 p-0"
-            disabled
-          >
-            <span className="sr-only">Go to previous page</span>
-            <svg
-              width="15"
-              height="15"
-              viewBox="0 0 15 15"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-4 w-4"
-            >
-              <path
-                d="M8.84182 3.13514C9.04327 3.32401 9.05348 3.64042 8.86462 3.84188L5.43521 7.49991L8.86462 11.1579C9.05348 11.3594 9.04327 11.6758 8.84182 11.8647C8.64036 12.0535 8.32394 12.0433 8.13508 11.8419L4.38508 7.84188C4.20477 7.64955 4.20477 7.35027 4.38508 7.15794L8.13508 3.15794C8.32394 2.95648 8.64036 2.94628 8.84182 3.13514Z"
-                fill="currentColor"
-                fillRule="evenodd"
-                clipRule="evenodd"
-              ></path>
-            </svg>
-          </button>
+          <IconButton
+            srOnly="Go to first page"
+            variant="outlined"
+            icon={MdOutlineKeyboardDoubleArrowLeft}
+          />
+          <IconButton
+            srOnly="Go to previous page"
+            variant="outlined"
+            icon={MdKeyboardArrowLeft}
+          />
+
           <button className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 border border-input bg-transparent shadow-sm hover:bg-accent hover:text-accent-foreground h-8 w-8 p-0">
             <span className="sr-only">Go to next page</span>
             <svg

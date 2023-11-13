@@ -3,7 +3,7 @@ import { Request, Response } from 'express';
 import csv from 'fast-csv';
 import { Parser } from 'json2csv';
 import slugify from 'slugify';
-import Product, { IProductDocument } from '@src/models/product.model';
+import Product from '@src/models/product.model';
 import User from '@src/models/user.model';
 // Services
 import * as cloudinaryService from '@src/services/cloudinary/cloudinary.services';

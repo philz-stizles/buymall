@@ -3,17 +3,37 @@ import slugify from 'slugify';
 import BadRequestError from '@src/errors/bad-request';
 import NotFoundError from '@src/errors/not-found';
 import Category, {
-  ICategory,
   ICategoryDocument,
 } from '@src/models/category.model';
+import { CloudinaryService } from '..';
 
-const create = async (data: ICategory): Promise<ICategoryDocument> => {
+type CategoryInput = {
+  name: string;
+  description?: string;
+  image: string;
+};
+
+const create = async (data: CategoryInput): Promise<ICategoryDocument> => {
   const existingCategory = await Category.findOne({ name: data.name });
   if (existingCategory) {
     throw new BadRequestError('Category already exists');
   }
 
-  return await Category.create({ ...data, slug: slugify(data.name) });
+  // Create a new category.
+  const category = await Category.create({ ...data, slug: slugify(data.name) });
+
+  // Upload category cover image.
+  const result = await CloudinaryService.uploadFile(data.image);
+
+  // Save cover image url to the category.
+  category.image = {
+    public_id: result.public_id,
+    url: result.secure_url,
+  };
+
+  category.save();
+
+  return category;
 };
 
 const findBySlug = async (
@@ -34,31 +54,59 @@ const list = async (
   // you should use lean.In general, if you do not modify the query results and do not use custom getters,
   // you should use lean(). If you modify the query results or rely on features like getters or transforms,
   // you should not use lean().
-  return Category.find(query, {}, options).sort({ createdAt: -1 });
+  //  const query = Category.find(query, {}, options) // .sort({ createdAt: -1 });
+  let filterQuery: any = {};
+
+  if (query.search) {
+    console.log(query.search);
+    filterQuery['$or'] = [
+      {
+        name: {
+          $regex: query.search,
+          $options: 'i',
+        },
+      },
+      {
+        description: {
+          $regex: query.search,
+          $options: 'i',
+        },
+      },
+    ];
+  }
+  const count = await Category.count();
+  const categories = await Category.find(filterQuery, {}, options).sort({ createdAt: -1 });
+  return { data: categories, count };
+};
+
+const readById = async (
+  id: string,
+  options: QueryOptions = {} // { lean: true }
+) => {
+  return Category.findById(id, {}, options).exec();
 };
 
 const update = async (
-  query: FilterQuery<ICategoryDocument>,
+  id: string,
   update: UpdateQuery<ICategoryDocument>,
   options: QueryOptions = { new: true }
 ) => {
-  const targetCategory = await Category.findOneAndUpdate(
-    query,
+  const targetCategory = await Category.findByIdAndUpdate(
+    id,
     { ...update, slug: slugify(update.name) },
     options
   );
+
   if (!targetCategory) {
     throw new NotFoundError('Category does not exist');
   }
-  return targetCategory;
 };
 
-export const remove = async (query: FilterQuery<ICategoryDocument>) => {
-  const targetCategory = await Category.findOneAndDelete(query);
+export const remove = async (id: string) => {
+  const targetCategory = await Category.findByIdAndDelete(id);
   if (!targetCategory) {
     throw new NotFoundError('Category does not exist');
   }
-  return targetCategory;
 };
 
-export default { create, list, update, remove };
+export default { create, list, readById, update, remove };

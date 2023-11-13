@@ -24,9 +24,9 @@ router
   .get(list);
 
 router
-  .route('/:slug')
+  .route('/:id')
   .get(read)
-  .put(authenticate, authorize('admin'), update)
+  .patch(authenticate, authorize('admin'), update)
   .delete(authenticate, authorize('admin'), remove);
 
 export default router;

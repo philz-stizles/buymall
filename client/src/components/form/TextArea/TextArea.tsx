@@ -1,3 +1,5 @@
+import classNames from "classnames";
+
 interface TextAreaProps
   extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
   label?: string;
@@ -37,7 +39,7 @@ const TextArea = ({
         id={inputId}
         autoCapitalize={autoCapitalize}
         autoCorrect={autoCorrect}
-        className={inputClassName}
+        className={classNames('input')}
         placeholder={placeholder}
         rows={3}
         {...rest}

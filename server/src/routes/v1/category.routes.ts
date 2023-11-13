@@ -23,10 +23,10 @@ router
   .get(list);
 
 router
-  .route('/:slug')
+  .route('/:id')
   .get(read)
-  .put(authenticate, update)
-  .delete(authenticate, remove);
+  .patch(authenticate, authorize('admin'), update)
+  .delete(authenticate, authorize('admin'), remove);
 
 router.get('/:id/sub-categories', getCategorySubs);
 

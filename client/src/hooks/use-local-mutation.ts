@@ -3,7 +3,7 @@ import { baseUrl } from '../utils/api';
 import { getToken } from '../utils/auth';
 
 type HttpConfig = {
-  method?: 'POST' | 'PUT' | 'DELETE';
+  method?: 'POST' | 'PUT' | 'DELETE' | 'PATCH';
   headers?: Record<string, string>;
 };
 
@@ -16,7 +16,7 @@ const useLocalMutation = <T, V>(
     onError,
   }: {
     options?: HttpConfig;
-    onSuccess?: (data: V) => void;
+    onSuccess?: (data?: V) => void;
     onError?: (data: V) => void;
   }
 ) => {
@@ -24,7 +24,7 @@ const useLocalMutation = <T, V>(
   const [error, setError] = useState<any>(null);
 
   const mutate = useCallback(
-    async (body: T) => {
+    async (body?: T) => {
       try {
         setIsLoading(true);
         setError(null);
@@ -41,8 +41,12 @@ const useLocalMutation = <T, V>(
           throw Error('Request failed. Please try again later.');
         }
 
-        const json = await response.json();
-        onSuccess && onSuccess(json.data);
+        if (response.status === 204) {
+          onSuccess && onSuccess();
+        } else {
+          const json = await response.json();
+          onSuccess && onSuccess(json.data);
+        }
       } catch (error: any) {
         setError(error.message || 'Something went wrong');
         onError && onError(error);
@@ -57,5 +61,3 @@ const useLocalMutation = <T, V>(
 };
 
 export default useLocalMutation;
-
- 

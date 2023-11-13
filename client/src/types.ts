@@ -1,3 +1,17 @@
+import { ReactElement } from 'react';
+
+export interface ColumnProps<T> {
+  key: string;
+  title: string | ReactElement;
+  render?: (column: ColumnProps<T>, item: T) => ReactElement;
+}
+
+export interface IFileUpload {
+  public_id?: string;
+  id: string;
+  url: string;
+}
+
 export interface ReadOnlyURLSearchParams extends URLSearchParams {
   append: never;
   set: never;
@@ -11,43 +25,6 @@ export enum RoleType {
   VENDOR = 'vendor',
 }
 
-export interface User {
-  email: string;
-  name: string;
-  role: RoleType;
-}
-
-export interface Role {
-  name: string;
-}
-
-export interface Skill {
-  name: string;
-}
-
-export interface Job {
-  title: string;
-  description: string;
-}
-
-export interface TechStack {
-  id: string;
-  name: string;
-  description: string;
-}
-
-export interface Technology {
-  name: string;
-  description: string;
-}
-
-export interface Profile {
-  bio: string;
-  email: string;
-  phone: string;
-  socialLinks: string[];
-  skills: Skill[];
-}
 export type Size = 'sm' | 'md' | 'lg';
 
 export type Variant =
@@ -60,3 +37,8 @@ export type Variant =
   | 'tertiary'
   | 'flat'
   | 'outlined';
+
+export type Paged<T> = {
+  count: number;
+  data: T[];
+};

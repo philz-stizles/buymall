@@ -8,6 +8,7 @@ export interface ICoupon {
   expiry: Date;
   discount: number;
   isActive?: boolean;
+  isPublished: boolean;
   createdBy?: PopulatedDoc<IUserDocument & Document>;
   vendor: PopulatedDoc<IVendorDocument & Document>;
   createdAt?: Date;
@@ -38,11 +39,20 @@ const schema = new Schema<ICouponDocument, ICouponModel>(
     expiry: { type: Date, required: true },
     discount: { type: Number, required: true },
     isActive: { type: Boolean, required: true, default: false },
+    isPublished: { type: Boolean, required: true, default: false },
     vendor: { type: Types.ObjectId, ref: 'Vendor' },
     createdBy: { type: Types.ObjectId, ref: 'User' },
   },
   { timestamps: true }
 );
+
+schema.set('toJSON', {
+  virtuals: true,
+  versionKey: false,
+  transform: (_, ret) => {
+    delete ret._id;
+  },
+});
 
 const Coupon = model<ICouponDocument, ICouponModel>('Coupon', schema);
 export default Coupon;

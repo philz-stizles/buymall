@@ -1,32 +1,55 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Button, Input, TextArea } from '../../../../../components/ui';
 import useLocalMutation from '../../../../../hooks/use-local-mutation';
 import { stagger, useAnimate } from 'framer-motion';
-import useLocalQuery from '../../../../../hooks/use-local-query';
-import { Category } from '../../../../../components/cards/CategoryCard/CategoryCard';
-import { Select } from '../../../../../components/form';
-import { baseUrl } from '../../../../../utils/constants';
+import { SubCategory } from '../../../../../models/sub-category';
+import { Checkbox, Select } from '../../../../../components/form';
+import { useLocalQuery } from '../../../../../hooks';
+import { Paged } from '../../../../../types';
+import { Category } from '../../../../../models/category';
 
 type Props = {
+  readonly?: boolean;
+  data: SubCategory | null;
+  isOpen?: boolean;
   onClose: () => void;
-  onReload?: () => void;
+  onReload?: (endpoint: string) => void;
 };
 
-const SubCategoryForm = ({ onClose, onReload }: Props) => {
+const SubCategoryForm = ({ data, onClose, onReload, readonly }: Props) => {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
+  const [isPublished, setIsPublished] = useState(false);
   const [category, setCategory] = useState('');
-  const { data: categories } = useLocalQuery<Category[]>(
-    `${baseUrl}/categories`,
-    []
-  );
-  const { isLoading, error, mutate } = useLocalMutation('/sub-categories', {
-    onSuccess: () => {
-      onReload && onReload();
-      onClose();
-    },
+  const { data: pagedCategories } = useLocalQuery<Paged<Category>>(`/categories`, {
+    count: 0,
+    data: [],
   });
+  const isEdit = data && data.id;
+  const { isLoading, error, mutate } = useLocalMutation(
+    `/sub-categories${isEdit ? `/${data.id}` : ''}`,
+    {
+      options: {
+        method: isEdit ? 'PATCH' : 'POST',
+      },
+      onSuccess: () => {
+        clearForm();
+        onReload && onReload('/sub-categories');
+        onClose();
+      },
+    }
+  );
   const [scope, animate] = useAnimate();
+
+  useEffect(() => {
+    if (data) {
+      setName(data.name);
+      setDescription(data.description);
+      setIsPublished(data.isPublished);
+    }
+  }, [data]);
+
+  const formIsValid = name.trim() !== '';
 
   const clearForm = () => {
     setName('');
@@ -48,34 +71,39 @@ const SubCategoryForm = ({ onClose, onReload }: Props) => {
     async (e: React.FormEvent) => {
       e.preventDefault();
 
-      console.log(name, description, category);
-
       handleFormValidation();
 
-      mutate({ name, description, category });
+      mutate({ name, description, isPublished, category });
 
-      clearForm();
-
-      // toast.success('A new category was created successful');
+      // toast.success('A new product was created successful');
     },
-    [category, description, handleFormValidation, mutate, name]
+    [handleFormValidation, mutate, name, description, isPublished, category]
   );
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-4" ref={scope}>
+    <form
+      aria-label="form"
+      onSubmit={handleSubmit}
+      className="flex flex-col gap-4"
+      ref={scope}
+    >
       {error && <small>{error.message}</small>}
+
+      {/* <ImageSelector selected={image} onChange={(uri) => setImage(uri)} /> */}
+
       <Input
+        readOnly={readonly}
         id="name"
         label="Name"
         disabled={isLoading}
         required
         value={name}
         onChange={(e) => setName(e.target.value)}
-        placeholder="E.g. DevOps"
+        placeholder="E.g. BUYM-COUP-0000"
       />
       <Select
         label="Select a category"
-        options={categories}
+        options={pagedCategories.data}
         onChange={(e) => setCategory(e.target.value)}
       />
       <TextArea
@@ -85,7 +113,17 @@ const SubCategoryForm = ({ onClose, onReload }: Props) => {
         required
         value={description}
         onChange={(e) => setDescription(e.target.value)}
+        readOnly={readonly}
       />
+
+      <Checkbox
+        label="Is Published?"
+        outlined
+        description="This category will be available in the store."
+        checked={isPublished}
+        onChange={(e) => setIsPublished(e.target.checked)}
+      />
+
       <div className="flex justify-end items-center gap-3 pt-2">
         <Button
           size="md"
@@ -94,120 +132,16 @@ const SubCategoryForm = ({ onClose, onReload }: Props) => {
           label="Cancel"
           onClick={onClose}
         />
-        <Button size="md" loading={isLoading} type="submit" label="Save" />
+        <Button
+          disabled={!formIsValid}
+          size="md"
+          loading={isLoading}
+          type="submit"
+          label={isEdit ? 'Save Changes' : 'Create'}
+        />
       </div>
     </form>
   );
 };
 
 export default SubCategoryForm;
-
-// import {
-//   ChangeEvent,
-//   FocusEvent,
-//   FormEvent,
-//   useCallback,
-//   useState,
-// } from 'react';
-// import { Button, Input } from '../../../../../components/ui';
-// import { isEmpty } from '../../../../../utils/validation';
-// import Select from '../../../../../components/form/Select/Select';
-// import { Category } from '../../../../../models/category';
-// import useLocalQuery from '../../../../../hooks/use-local-query';
-
-// export interface SubCategoryFormValues {
-//   name: string;
-//   description: string;
-// }
-
-// type Props = {
-//   isLoading?: boolean;
-//   onSubmit: (data: SubCategoryFormValues) => Promise<void>;
-//   onCancel: () => void;
-// };
-
-// const AddSubCategory = ({ onSubmit, onCancel, isLoading = false }: Props) => {
-//   const { data: categories } = useLocalQuery<Category[]>('/categories', []);
-//   const [{ value: name, isTouched: nameIsTouched }, setName] = useState({
-//     value: '',
-//     errorMessage: '',
-//     isTouched: false,
-//   });
-//   const [
-//     { value: description, isTouched: descriptionIsTouched },
-//     setDescription,
-//   ] = useState({
-//     value: '',
-//     errorMessage: '',
-//     isTouched: false,
-//   });
-
-//   const nameIsInValid = isEmpty(name) && nameIsTouched;
-//   const descriptionIsInValid = isEmpty(description) && descriptionIsTouched;
-//   const formIsValid = nameIsInValid || descriptionIsInValid;
-
-//   const resetForm = () => {
-//     setName({ value: '', errorMessage: '', isTouched: false });
-//     setDescription({ value: '', errorMessage: '', isTouched: false });
-//   };
-
-//   const submitHandler = useCallback(
-//     async (e: FormEvent<HTMLFormElement>) => {
-//       e.preventDefault();
-//       if (nameIsInValid || descriptionIsInValid) {
-//         return;
-//       }
-
-//       onSubmit({ name, description });
-//       resetForm();
-//     },
-//     [name, description, descriptionIsInValid, nameIsInValid, onSubmit]
-//   );
-
-//   return (
-//     <form onSubmit={submitHandler}>
-//       <Input
-//         disabled={isLoading}
-//         label="Name"
-//         value={name}
-//         isValid={!nameIsInValid}
-//         onChange={(e: ChangeEvent<HTMLInputElement>) => {
-//           setName((prev) => ({ ...prev, value: e.target.value }));
-//         }}
-//         onBlur={(e: FocusEvent<HTMLInputElement>) => {
-//           setName((prev) => {
-//             return { ...prev, isTouched: true };
-//           });
-//         }}
-//       />
-//       <Input
-//         label="Description"
-//         disabled={isLoading}
-//         value={description}
-//         isValid={!descriptionIsInValid}
-//         onChange={(e: ChangeEvent<HTMLInputElement>) => {
-//           setDescription((prev) => ({ ...prev, value: e.target.value }));
-//         }}
-//         onBlur={(e: FocusEvent<HTMLInputElement>) => {
-//           setDescription((prev) => ({ ...prev, isTouched: true }));
-//         }}
-//       />
-//       <Select options={categories} />
-//       <div className="flex items-center gap-1">
-//         <Button
-//           label="Cancel"
-//           outlined
-//           disabled={isLoading}
-//           onClick={onCancel}
-//         />
-//         <Button
-//           type="submit"
-//           label="Save"
-//           disabled={!formIsValid || isLoading}
-//         />
-//       </div>
-//     </form>
-//   );
-// };
-
-// export default AddSubCategory;

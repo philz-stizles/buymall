@@ -16,7 +16,7 @@ const Orders = ({ title }: Props) => {
         <div className="min-w-screen flex justify-center bg-gray-100 font-sans overflow-hidden">
           <div className="w-full">
             <div className="bg-white shadow-md rounded">
-              <table className="min-w-max w-full table-auto">
+              <table className="min-w-max w-full table-auto text-sm">
                 <thead>
                   <tr className="border-b border-slate-300">
                     <Th title="#" />
@@ -92,7 +92,7 @@ const Th = ({ title, className }: { className?: string; title: string }) => (
   <th
     scope="col"
     className={classNames(
-      'py-3 pr-6 text-left font-medium text-slate-500 text-sm',
+      'py-3 pr-6 text-left font-medium text-slate-500',
       className
     )}
   >
@@ -107,7 +107,7 @@ const Td = ({
   className?: string;
   children: React.ReactNode;
 }) => (
-  <td className={classNames('py-3 pr-6 text-left font-medium', className)}>{children}</td>
+  <td className={classNames('py-2 pr-6 text-left text-slate-700', className)}>{children}</td>
 );
 
 export default Orders;
