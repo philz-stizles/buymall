@@ -1,6 +1,4 @@
 import { createBrowserRouter } from 'react-router-dom';
-import Home from './public/Home/Home';
-import Privacy from './public/Privacy/Privacy';
 import React from 'react';
 import RootLayout from '../components/layouts/RootLayout';
 import Error from './public/Error/Error';
@@ -20,14 +18,8 @@ import {
 } from './vendor';
 import { PageLoader } from '../components/ui';
 import adminRoutes from './admin';
+import publicRoutes from './public';
 
-// Lazy loaded routes.
-const Products = React.lazy(() => import('./public/Products/Products'));
-const ProductDetails = React.lazy(
-  () => import('./public/ProductDetails/ProductDetails')
-);
-const Vendor = React.lazy(() => import('./public/Vendor/Vendor'));
-const Category = React.lazy(() => import('./public/Category/Category'));
 
 const routes = createBrowserRouter([
   {
@@ -40,42 +32,7 @@ const routes = createBrowserRouter([
     ),
     errorElement: <Error />,
     loader: publicRouteLoader,
-    children: [
-      {
-        index: true,
-        element: <Home />,
-      },
-
-      {
-        path: '/privacy',
-        element: <Privacy />,
-      },
-      {
-        path: '/category',
-        element: <Category />,
-      },
-      {
-        path: '/products',
-        children: [
-          {
-            index: true,
-            element: <Products />,
-          },
-          {
-            path: ':id',
-            element: <ProductDetails />,
-          },
-        ],
-      },
-      {
-        path: '/vendor',
-        element: (
-          <React.Suspense fallback={<PageLoader />}>
-            <Vendor />
-          </React.Suspense>
-        ),
-      },
-    ],
+    children: publicRoutes,
   },
   {
     path: '/signup',

@@ -9,7 +9,7 @@ import {
 } from '../utils/api.utils';
 import AppError from '../errors/app.error';
 import * as factory from '../factories/handler.factory';
-import Order, { OrderDocument } from '../models/order.model';
+import Order, { IOrderDocument } from '../models/order.model';
 import { TokenService } from '@src/services';
 import { DecodedIdToken } from 'firebase-admin/lib/auth/token-verifier';
 
@@ -203,7 +203,7 @@ export const getAllOrders = async (
   _req: Request,
   res: Response
 ): Promise<void> => {
-  const allOrders: OrderDocument[] = await Order.find({})
+  const allOrders: IOrderDocument[] = await Order.find({})
     .sort('-createdAt')
     .populate('products.product')
     .exec();
@@ -217,7 +217,7 @@ export const updateOrderStatus = async (
 ): Promise<void> => {
   const { orderId, orderStatus } = req.body;
 
-  const updated: OrderDocument | null = await Order.findByIdAndUpdate(
+  const updated: IOrderDocument | null = await Order.findByIdAndUpdate(
     orderId,
     { orderStatus },
     { new: true }

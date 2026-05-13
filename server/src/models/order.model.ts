@@ -1,15 +1,15 @@
-import { Schema, Types, model, Document, PopulatedDoc } from 'mongoose';
+import { Schema, Types, model, Document, PopulatedDoc, Model } from 'mongoose';
 import { IUserDocument } from '@src/models//user.model';
 
 interface IOrderProduct {
   product: Types.ObjectId;
-  count: number;
+  quantity: number;
   color: string;
 }
 
-export interface OrderDocument extends Document {
+export interface IOrder {
+  isPaid: boolean;
   products: IOrderProduct[];
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   paymentIntent: any;
   status: string;
   createdBy: PopulatedDoc<IUserDocument & Document>;
@@ -17,12 +17,17 @@ export interface OrderDocument extends Document {
   updatedAt: string;
 }
 
-const schema = new Schema(
+export interface IOrderDocument extends Document, IOrder {}
+
+export interface IOrderModel extends Model<IOrderDocument> {}
+
+const schema = new Schema<IOrderDocument, IOrderModel>(
   {
+    isPaid: { type: Boolean, default: false },
     products: [
       {
         product: { type: Types.ObjectId, ref: 'Product' },
-        count: Number,
+        quantity: Number,
         color: String,
       },
     ],
@@ -38,7 +43,7 @@ const schema = new Schema(
         'Completed',
       ],
     },
-    createdBy: { type: Types.ObjectId, ref: 'User', required: true },
+    createdBy: { type: Types.ObjectId, ref: 'User' },
   },
   { timestamps: true }
 );
@@ -51,4 +56,4 @@ schema.set('toJSON', {
   },
 });
 
-export default model<OrderDocument>('Order', schema);
+export default model<IOrderDocument, IOrderModel>('Order', schema);

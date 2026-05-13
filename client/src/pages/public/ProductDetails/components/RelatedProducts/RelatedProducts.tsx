@@ -1,33 +1,23 @@
 import { ProductCard } from '../../../../../components/cards';
+import { NoResults } from '../../../../../components/ui';
 import { Product } from '../../../../../models/product';
 
 type Props = {
-  products: Product[];
+  title?: string;
+  items: Product[];
 };
 
-const RelatedProducts = ({ products }: Props) => {
+const RelatedProducts = ({ items, title }: Props) => {
   return (
-    <>
-      <div className="row">
-        <div className="col text-center pt-5 pb-5">
-          <hr />
-          <h4>Related Products</h4>
-          <hr />
-        </div>
+    <div className="space-y-4">
+      {title && <h3 className="font-bold text-3xl">{title}</h3>}
+      {items.length === 0 && <NoResults />}
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+        {items.map((item) => (
+          <ProductCard key={item.id} product={item} />
+        ))}
       </div>
-
-      <div className="row pb-5">
-        {products.length ? (
-          products.map((product) => (
-            <div key={product.id} className="col-md-4">
-              <ProductCard product={product} />
-            </div>
-          ))
-        ) : (
-          <div className="text-center col">No Products Found</div>
-        )}
-      </div>
-    </>
+    </div>
   );
 };
 

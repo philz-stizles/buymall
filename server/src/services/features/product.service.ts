@@ -33,7 +33,7 @@ const findBySlug = async (
 
 const list = async (
   query: FilterQuery<IProductDocument>,
-  options: QueryOptions = { lean: true }
+  options: QueryOptions = {} // { lean: true }
 ) => {
   // If you're executing a query and sending the results without modification to, say, an Express response,
   // you should use lean.In general, if you do not modify the query results and do not use custom getters,

@@ -7,6 +7,7 @@ export { default as CouponService } from './features/coupon.service';
 export { default as ProductService } from './features/product.service';
 export { default as ColorService } from './features/color.service';
 export { default as SizeService } from './features/size.service';
+export { default as OrderService } from './features/order.service';
 export { default as OtpService } from './otp.service';
 export { default as TokenService } from './token.service';
 export * as CloudinaryService from './cloudinary/cloudinary.services';

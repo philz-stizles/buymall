@@ -2,6 +2,8 @@ import { IFileUpload } from '../types';
 import { Category } from './category';
 import { Rating } from './rating';
 
+export type Shipping = 'yes' | 'no';
+
 export interface Product {
   id: string;
   title: string;

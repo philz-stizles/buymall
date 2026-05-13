@@ -12,14 +12,17 @@ import {
 } from '../../../../../components/form';
 import { baseUrl } from '../../../../../utils/constants';
 import { Category } from '../../../../../models/category';
+import { Paged } from '../../../../../types';
+import { CircleLoader, ClipLoader } from 'react-spinners';
 
 type Props = {
   isOpen?: boolean;
   onClose: () => void;
-  onReload?: () => void;
+  onReload?: (endpoint: string) => void;
 };
 
 const ProductForm = ({ onClose, onReload }: Props) => {
+  const [isBusy, setIsBusy] = useState(false);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [images, setImages] = useState([]);
@@ -30,17 +33,17 @@ const ProductForm = ({ onClose, onReload }: Props) => {
   const [category, setCategory] = useState<string>('');
   const [subCategory, setSubCategory] = useState<string>('');
   const [isPublished, setIsPublished] = useState(false);
-  const { data: categories } = useLocalQuery<Category[]>(
-    `${baseUrl}/categories`,
-    []
+  const { data: pagedCategories } = useLocalQuery<Paged<Category>>(
+    '/categories',
+    { count: 0, data: [] }
   );
   const { data: subCategories, reload: reloadSubCategories } = useLocalQuery<
     SubCategory[]
-  >(`${baseUrl}/categories/${category}/sub-categories`, []);
+  >(category ? `/categories/${category}/sub-categories` : null, []);
   const { isLoading, error, mutate } = useLocalMutation('/products', {
     onSuccess: () => {
       clearForm();
-      onReload && onReload();
+      onReload && onReload('/products');
       onClose();
     },
   });
@@ -49,7 +52,7 @@ const ProductForm = ({ onClose, onReload }: Props) => {
   const formIsValid = title.trim() !== '';
 
   useEffect(() => {
-    reloadSubCategories();
+    category && reloadSubCategories(`/categories/${category}/sub-categories`);
   }, [category, reloadSubCategories]);
 
   const clearForm = () => {
@@ -105,6 +108,8 @@ const ProductForm = ({ onClose, onReload }: Props) => {
     ]
   );
 
+  const formIsBusy = isLoading || isBusy;
+
   return (
     <form
       aria-label="form"
@@ -113,11 +118,16 @@ const ProductForm = ({ onClose, onReload }: Props) => {
       ref={scope}
     >
       {error && <small>{error.message}</small>}
-      <FileUpload title='Upload an Image' files={images} setFiles={setImages} />
+      <FileUpload
+        title="Upload an Image"
+        files={images}
+        setFiles={setImages}
+        setIsLoading={setIsBusy}
+      />
       <Input
         id="title"
         label="Name"
-        disabled={isLoading}
+        disabled={formIsBusy}
         required
         value={title}
         onChange={(e) => setTitle(e.target.value)}
@@ -126,7 +136,7 @@ const ProductForm = ({ onClose, onReload }: Props) => {
       <TextArea
         id="description"
         label="Description"
-        disabled={isLoading}
+        disabled={formIsBusy}
         required
         value={description}
         onChange={(e) => setDescription(e.target.value)}
@@ -139,7 +149,7 @@ const ProductForm = ({ onClose, onReload }: Props) => {
           step={0.01}
           id="price"
           label="Price"
-          disabled={isLoading}
+          disabled={formIsBusy}
           required
           value={price}
           onChange={(e) => setPrice(e.target.value)}
@@ -151,7 +161,7 @@ const ProductForm = ({ onClose, onReload }: Props) => {
           defaultValue={1}
           id="quantity"
           label="Quantity"
-          disabled={isLoading}
+          disabled={formIsBusy}
           required
           value={quantity}
           onChange={(e) => setQuantity(e.target.value)}
@@ -162,7 +172,7 @@ const ProductForm = ({ onClose, onReload }: Props) => {
 
       <Select
         label="Select a Category"
-        options={categories}
+        options={pagedCategories.data}
         value={category}
         onChange={(e) => {
           setCategory(e.target.value);
@@ -198,13 +208,13 @@ const ProductForm = ({ onClose, onReload }: Props) => {
       <div className="flex justify-end items-center gap-3 pt-2">
         <Button
           size="md"
-          disabled={isLoading}
+          disabled={formIsBusy}
           variant="outlined"
           label="Cancel"
           onClick={onClose}
         />
         <Button
-          disabled={!formIsValid}
+          disabled={!formIsValid || isBusy}
           size="md"
           loading={isLoading}
           type="submit"

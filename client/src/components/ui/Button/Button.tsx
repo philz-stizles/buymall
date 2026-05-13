@@ -6,6 +6,7 @@ import classNames from 'classnames';
 import { motion } from 'framer-motion';
 
 const SIZE = {
+  'xs': '',
   sm: 'text-xs font-medium px-2.5 py-1.5',
   md: 'text-sm font-medium px-3 py-2', // px-5 py-2.
   lg: 'text-lg font-bold px-6 py-3',

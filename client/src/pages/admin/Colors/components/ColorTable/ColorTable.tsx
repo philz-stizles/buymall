@@ -23,7 +23,7 @@ const ColorTable = ({ colors, onDelete, onEdit, onView }: Props) => {
   return (
     <div className="space-y-4">
       <div className="overflow-x-auto rounded-lg border border-slate-200">
-        <div className="min-w-screen flex justify-center bg-gray-100 font-sans overflow-hidden">
+        <div className="min-w-screen flex justify-center bg-gray-100   overflow-hidden">
           <div className="w-full">
             <div className="bg-white shadow-md rounded"></div>
             <table className="min-w-max w-full table-auto caption-bottom text-sm ">

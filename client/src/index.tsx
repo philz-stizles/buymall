@@ -9,6 +9,8 @@ import { ThemeProvider } from '../../client/src/context/theme-context';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import { CartProvider } from './context/cart-context';
+import { Toaster } from 'sonner';
 
 const apolloClient = new ApolloClient({
   uri: '',
@@ -21,15 +23,18 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <Provider store={store}>
-      <ApolloProvider client={apolloClient}>
-        <ModalProvider>
-          <DrawerProvider>
-            <ThemeProvider>
-              <App />
-            </ThemeProvider>
-          </DrawerProvider>
-        </ModalProvider>
-      </ApolloProvider>
+      <CartProvider>
+        <ApolloProvider client={apolloClient}>
+          <ModalProvider>
+            <DrawerProvider>
+              <ThemeProvider>
+                <Toaster />
+                <App />
+              </ThemeProvider>
+            </DrawerProvider>
+          </ModalProvider>
+        </ApolloProvider>
+      </CartProvider>
     </Provider>
   </React.StrictMode>
 );

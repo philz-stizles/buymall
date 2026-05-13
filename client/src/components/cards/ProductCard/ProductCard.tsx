@@ -1,69 +1,136 @@
 import { useNavigate } from 'react-router-dom';
 import { Product } from '../../../models/product';
-import { MouseEventHandler } from 'react';
-import { IoCart, IoExpand } from 'react-icons/io5';
+import { MouseEvent, MouseEventHandler, useEffect, useState } from 'react';
+import {
+  IoCartOutline,
+  IoExpandOutline,
+  IoPencilOutline,
+} from 'react-icons/io5';
 import { Currency, IconButton, Ratings } from '../../ui';
+import { useCart } from '../../../context';
+import DefaultImage from './../../../assets/images/image-placeholder.png';
+import { AnimatePresence } from 'framer-motion';
+import PreviewModal from '../../ui/PreviewModal/PreviewModal';
+import { LuPencil, LuTrash } from 'react-icons/lu';
+
+type Mode = 'vendor' | 'admin' | 'showcase';
 
 type Props = {
   product: Product;
+  onDelete?: () => void;
+  onEdit?: () => void;
+  mode?: Mode;
 };
 
-const ProductCard = ({ product }: Props) => {
-  const { id, title, price, category, images } = product;
-  // const previewModal = usePreviewModal();
-  // const cart = useCart();
+const ProductCard = ({
+  product,
+  mode = 'showcase',
+  onDelete,
+  onEdit,
+}: Props) => {
+  const { title, slug, price, category, images } = product;
+  const [showPreview, setShowPreview] = useState(false);
+  const cart = useCart();
   const navigate = useNavigate();
 
-  const handleClick = () => {
-    navigate(`/product/${id}`);
+  useEffect(() => {
+    if (showPreview) {
+      document.body.classList.add('overflow-hidden');
+    } else {
+      document.body.classList.remove('overflow-hidden');
+    }
+  }, [showPreview]);
+
+  const handleNavigate = () => {
+    navigate(`/products/${slug}`);
   };
 
-  const onPreview: MouseEventHandler<HTMLButtonElement> = (event) => {
+  const handlePreview: MouseEventHandler<HTMLButtonElement> = (event) => {
     event.stopPropagation();
-
-    // previewModal.onOpen(data);
+    console.log('handle');
+    setShowPreview(true);
   };
 
-  const onAddToCart: MouseEventHandler<HTMLButtonElement> = (event) => {
+  const handleAddToCart = (event: MouseEvent, product: Product) => {
     event.stopPropagation();
 
-    // cart.addItem(data);
+    cart.addItem(product);
   };
 
   return (
-    <div
-      onClick={handleClick}
-      className="bg-white group cursor-pointer rounded-xl border p-3 space-y-4"
-    >
-      {/* Image & actions */}
-      <div className="aspect-square rounded-xl bg-gray-100 relative">
-        <img
-          src={images?.[0]?.url}
-          alt=""
-          className="aspect-square object-cover rounded-md"
-        />
-        <div className="opacity-0 group-hover:opacity-100 transition absolute w-full px-6 bottom-5">
-          <div className="flex gap-x-6 justify-center">
-            <IconButton onClick={onPreview}>
-              <IoExpand size={20} className="text-gray-600" />
-            </IconButton>
-            <IconButton onClick={onAddToCart}>
-              <IoCart size={20} className="text-gray-600" />
-            </IconButton>
+    <>
+      <div
+        onClick={handleNavigate}
+        className="bg-white group cursor-pointer rounded-xl border p-3 space-y-4"
+      >
+        {/* Image & actions */}
+        <div className="aspect-square rounded-md bg-gray-100 relative overflow-hidden">
+          <img
+            src={images?.[0]?.url ?? DefaultImage}
+            alt=""
+            className="w-full h-full object-cover object-center"
+          />
+          <div className="opacity-0 group-hover:opacity-100 transition absolute w-full px-6 bottom-5">
+            <div className="flex gap-x-6 justify-center">
+              {mode === 'vendor' ? (
+                <>
+                  <IconButton
+                    variant="white"
+                    rounded
+                    icon={LuPencil}
+                    onClick={onEdit}
+                  />
+
+                  <IconButton
+                    variant="white"
+                    rounded
+                    icon={LuTrash}
+                    onClick={onDelete}
+                  />
+                </>
+              ) : (
+                <>
+                  <IconButton
+                    variant="white"
+                    size="sm"
+                    rounded
+                    onClick={handlePreview}
+                    icon={IoExpandOutline}
+                  />
+
+                  <IconButton
+                    icon={IoCartOutline}
+                    variant="white"
+                    size="sm"
+                    rounded
+                    onClick={(e) => handleAddToCart(e, product)}
+                  />
+                </>
+              )}
+            </div>
           </div>
         </div>
+        {/* Description */}
+        <div>
+          <p className="font-semibold text-lg">{title}</p>
+          <p className="text-sm text-gray-500">{category?.name}</p>
+        </div>
+        {/* Price & Review */}
+        <div className="flex items-center justify-between">
+          <Currency value={price} />
+          <Ratings ratings={[{ star: 4, postedBy: '' }]} />
+        </div>
       </div>
-      {/* Description */}
-      <div>
-        <p className="font-semibold text-lg">{title}</p>
-        <p className="text-sm text-gray-500">{category?.name}</p>
-      </div>
-      {/* Price & Reiew */}
-      <div className="flex items-center justify-between">
-        <Currency value={price} /><Ratings ratings={[{  star: 4, postedBy: ''}]} />
-      </div>
-    </div>
+      <AnimatePresence>
+        {showPreview && (
+          <PreviewModal
+            product={product}
+            onClose={() => setShowPreview(false)}
+          />
+        )}
+      </AnimatePresence>
+    </>
   );
-}; 
+};
 
 export default ProductCard;

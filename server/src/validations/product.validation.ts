@@ -2,7 +2,7 @@ import Joi from 'joi';
 
 const create = {
   body: Joi.object().keys({
-    title: Joi.string().required(),
+    title: Joi.string().required().max(32),
     description: Joi.string().required(),
     price: Joi.number(),
     quantity: Joi.number().required(),

@@ -13,7 +13,7 @@ const Orders = ({ title }: Props) => {
   return (
     <ChartWrapper title={title}>
       <div className="overflow-x-auto">
-        <div className="min-w-screen flex justify-center bg-gray-100 font-sans overflow-hidden">
+        <div className="min-w-screen flex justify-center bg-gray-100   overflow-hidden">
           <div className="w-full">
             <div className="bg-white shadow-md rounded">
               <table className="min-w-max w-full table-auto text-sm">
@@ -107,7 +107,9 @@ const Td = ({
   className?: string;
   children: React.ReactNode;
 }) => (
-  <td className={classNames('py-2 pr-6 text-left text-slate-700', className)}>{children}</td>
+  <td className={classNames('py-2 pr-6 text-left text-slate-700', className)}>
+    {children}
+  </td>
 );
 
 export default Orders;

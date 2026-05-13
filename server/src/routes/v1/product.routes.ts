@@ -38,7 +38,12 @@ router.post('/filtered', list);
 
 router.get('/total', getProductsTotal);
 
-router.post('/upload-file', authenticate, authorize('admin', 'vendor'), uploadFile);
+router.post(
+  '/upload-file',
+  authenticate,
+  authorize('admin', 'vendor'),
+  uploadFile
+);
 router.post(
   '/remove-file',
   authenticate,

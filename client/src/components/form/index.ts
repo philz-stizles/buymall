@@ -4,3 +4,4 @@ export { default as Input } from './Input/Input';
 export { default as TextArea } from './TextArea/TextArea';
 export { default as Checkbox } from './Checkbox/Checkbox';
 export { default as ImageSelector } from './ImageSelector/ImageSelector';
+export { default as RichText } from './RichText/RichText';

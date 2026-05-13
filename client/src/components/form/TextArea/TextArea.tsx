@@ -1,4 +1,4 @@
-import classNames from "classnames";
+import classNames from 'classnames';
 
 interface TextAreaProps
   extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
@@ -16,6 +16,7 @@ const TextArea = ({
   autoCapitalize = 'none',
   autoCorrect = 'off',
   info,
+  className,
   ...rest
 }: TextAreaProps) => {
   const inputId =
@@ -23,9 +24,11 @@ const TextArea = ({
     (label && typeof label === 'string'
       ? label.replace(' ', '-').toLowerCase()
       : undefined);
-  const inputClassName = `p-4 w-auto outline-none border border-slate-300 rounded-md transition text-sm placeholder:text-sm focus:outline-none focus:border-indigo-500`;
+
   return (
-    <div className="relative flex flex-col w-full mb-2">
+    <div
+      className={classNames('relative flex flex-col w-full mb-2', className)}
+    >
       {/* {label && <label className="sr-only font-semibold mb-1">{label}</label>} */}
       {label && (
         <label

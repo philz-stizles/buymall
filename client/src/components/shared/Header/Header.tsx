@@ -1,6 +1,6 @@
-import { Link, useLoaderData } from 'react-router-dom';
+import { Link, useLoaderData, useNavigate } from 'react-router-dom';
 import { Container } from '..';
-import { AppIcon, Button, Logo } from '../../ui';
+import { AppIcon, Button, IconButton, Logo } from '../../ui';
 import {
   IoCartOutline,
   IoHeartOutline,
@@ -15,19 +15,18 @@ import VendorSignupModal from '../../../pages/public/Home/components/VendorSignu
 const Header = () => {
   const [showModal, setShowModal] = useState(false);
   const currentUser = useLoaderData() as CurrentUser;
-  console.log(currentUser);
+  const navigate = useNavigate();
 
   return (
     <Fragment>
-      {' '}
-      <header className="shadow-sm">
+      <header className="border-b">
         <Container
           fluid
           className="flex h-[70px] flex-row items-center justify-between max-xl:max-w-full gap-12"
         >
           <Logo />
           <nav className="flex-1 flex justify-center">
-            <ul className="flex items-center gap-8 uppercase font-medium">
+            <ul className="flex items-center gap-8 uppercase font-medium text-sm">
               <li>
                 <Link to="#">Shop</Link>
               </li>
@@ -43,12 +42,6 @@ const Header = () => {
             </ul>
           </nav>
           <div className="flex items-center gap-8">
-            <div className="flex items-center gap-4">
-              <AppIcon icon={IoHeartOutline} />
-              <AppIcon icon={IoCartOutline} />
-              <AppIcon icon={IoLocationOutline} />
-            </div>
-            <div className="border-slate-700 h-4 w-[1px] lg:border-r border-r"></div>
             <div className="flex items-center gap-4">
               {currentUser && currentUser.user ? (
                 <>
@@ -68,13 +61,33 @@ const Header = () => {
                 </>
               ) : (
                 <>
-                  <Button onClick={() => setShowModal(true)}>Become a Vendor</Button>
+                  <Button onClick={() => setShowModal(true)}>
+                    Become a Vendor
+                  </Button>
                   <Link to="/signup" className="flex items-center gap-1">
                     <span>Sign up</span>{' '}
                     <AppIcon icon={IoPersonCircleOutline} />
                   </Link>
                 </>
               )}
+            </div>
+            <div className="border-slate-300 h-4 w-[1px] lg:border-r border-r-2"></div>
+            <div className="flex items-center gap-2">
+              <IconButton
+                size="sm"
+                icon={IoHeartOutline}
+                onClick={() => navigate('/favorites')}
+              />
+              <IconButton
+                size="sm"
+                icon={IoCartOutline}
+                onClick={() => navigate('/cart')}
+              />
+              <IconButton
+                size="sm"
+                icon={IoLocationOutline}
+                onClick={() => navigate('/location')}
+              />
             </div>
           </div>
         </Container>

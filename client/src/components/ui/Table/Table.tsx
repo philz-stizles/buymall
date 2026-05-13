@@ -26,14 +26,17 @@ const Table = <T,>({ columns, rows }: Props<T>) => {
       {rows?.map((row, index) => (
         // bg-white px-6 p-4
         // border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted
-        <tr key={index} className="rounded-lg border-b border-slate-200 transition-colors bg-white hover:bg-indigo-50 data-[state=selected]:bg-muted text-slate-600"></tr>
+        <tr
+          key={index}
+          className="rounded-lg border-b border-slate-200 transition-colors bg-white hover:bg-indigo-50 data-[state=selected]:bg-muted text-slate-600"
+        ></tr>
       ))}
     </tbody>
   );
 
   return (
     <div className="overflow-x-auto">
-      <div className="min-w-screen flex justify-center bg-gray-100 font-sans overflow-hidden">
+      <div className="min-w-screen flex justify-center bg-gray-100   overflow-hidden">
         <div className="w-full">
           <div className="bg-white shadow-md rounded"></div>
           <table className="min-w-max w-full table-auto caption-bottom text-sm">

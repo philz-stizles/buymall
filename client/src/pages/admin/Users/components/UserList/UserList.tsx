@@ -8,7 +8,7 @@ type Props = {
 const UserList = ({ data }: Props) => {
   return (
     <div className="overflow-x-auto">
-      <div className="min-w-screen flex justify-center bg-gray-100 font-sans overflow-hidden">
+      <div className="min-w-screen flex justify-center bg-gray-100   overflow-hidden">
         <div className="w-full">
           <div className="bg-white shadow-md rounded">
             <table className="min-w-max w-full table-auto">

@@ -6,8 +6,8 @@ const Services = () => {
   return (
     <section id="features">
       <Container>
-        <div className="grid grid-cols-3 gap-4 pt-20">
-          {FEATURES.slice(0, 3).map((item) => (
+        <div className="grid grid-cols-4 gap-4 pt-20">
+          {FEATURES.slice(0, 4).map((item) => (
             <ServiceCard key={item.id} item={item} />
           ))}
         </div>

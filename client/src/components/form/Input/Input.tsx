@@ -4,13 +4,9 @@ import { IconType } from 'react-icons';
 import { IoEyeOffOutline, IoEyeOutline } from 'react-icons/io5';
 
 interface Props extends React.InputHTMLAttributes<HTMLInputElement> {
-  className?: string;
-  disabled?: boolean;
   label?: string;
   icon?: IconType;
-  type?: string;
   name?: string;
-  required?: boolean;
   isValid?: boolean;
   message?: string;
 }

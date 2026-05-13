@@ -15,6 +15,7 @@ const AdminOrdersPage = React.lazy(() => import('./Orders/Orders'));
 const AdminVendorsPage = React.lazy(() => import('./Vendors/Vendors'));
 const AdminUsersPage = React.lazy(() => import('./Users/Users'));
 const AdminProductsPage = React.lazy(() => import('./Products/Products'));
+const AdminSettingsPage = React.lazy(() => import('./Settings/Settings'));
 
 const adminRoutes = [
   {
@@ -60,6 +61,10 @@ const adminRoutes = [
   {
     path: 'orders',
     element: <AdminOrdersPage />,
+  },
+  {
+    path: 'settings',
+    element: <AdminSettingsPage />,
   },
 ];
 

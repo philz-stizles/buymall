@@ -10,19 +10,29 @@ type Props = ButtonHTMLAttributes<HTMLButtonElement> & {
   children?: React.ReactNode;
   variant?: Variant;
   isHoverable?: boolean;
-  srOnly?: string
+  srOnly?: string;
+  rounded?: boolean;
 };
 
 const SIZE: { [key: string]: string } = {
-  sm: '',
-  md: '',
-  lg: '',
+  xs: 'p-1',
+  sm: 'p-1.5',
+  md: 'p-1.5',
+  lg: 'p-1.5',
+};
+
+const ICONSIZE: { [key: string]: number } = {
+  xs: 18,
+  sm: 18,
+  md: 24,
+  lg: 28,
 };
 
 const IconButton = ({
   srOnly,
+  rounded = false,
   icon: Icon,
-  size = 'sm',
+  size = 'xs',
   isHoverable,
   variant = 'flat',
   children,
@@ -32,7 +42,7 @@ const IconButton = ({
     flat: `border-none`,
     black: `bg-slate-950 border-slate-950 text-white`,
     outlined: 'border border-input bg-transparent p-1.5',
-    white: `text-black bg-white`,
+    white: `text-slate-600 bg-white border shadow-md`,
     green: `text-white bg-green-600 ${isHoverable && 'hover:bg-green-700'}`,
     primary: `bg-[#115DFC] border-[#115DFC] text-white ${
       isHoverable && 'hover:bg-[#115DFC]'
@@ -48,14 +58,15 @@ const IconButton = ({
     <button
       type="button"
       className={classNames(
-        'items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 border border-input bg-transparent shadow-sm hover:bg-accent hover:text-accent-foreground hidden p-0 lg:flex',
+        'items-center justify-center whitespace-nowrap text-sm font-medium focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 border border-input bg-transparent hover:bg-accent hover:text-accent-foreground hidden p-0 lg:flex hover:scale-110 transition',
         variants[variant],
-        SIZE[size]
+        SIZE[size],
+        rounded && 'rounded-full'
       )}
       {...rest}
     >
       {srOnly && <span className="sr-only">{srOnly}</span>}
-      {Icon ? <Icon size={18} /> : children}
+      {Icon ? <Icon size={ICONSIZE[size]} /> : children}
     </button>
   );
 };

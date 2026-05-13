@@ -1,8 +1,8 @@
-import { render, screen } from "@testing-library/react";
-import Button from "./Button";
+import { render, screen } from '@testing-library/react';
+import Button from './Button';
 
-describe("Button Component", () => {
-  test("renders a button with label", () => {
+describe('Button Component', () => {
+  test('renders a button with label', () => {
     // Arrange.
     const label = 'Submit';
     render(<Button label={label} />);
@@ -15,12 +15,12 @@ describe("Button Component", () => {
     expect(linkElement).toBeInTheDocument();
   });
 
-  test("renders a disabled button", () => {
+  test('renders a disabled button', () => {
     // Arrange.
     render(<Button label="Submit" disabled />);
 
     // Act.
-    const buttonElement = screen.getByRole("button");
+    const buttonElement = screen.getByRole('button');
 
     // Assert.
     expect(buttonElement).toBeDisabled();
@@ -31,10 +31,10 @@ describe("Button Component", () => {
     render(<Button label="Submit" />);
 
     // Act.
-    const buttonElement = screen.getByRole("button");
+    const buttonElement = screen.getByRole('button');
 
     // Assert.
-    expect(buttonElement).toHaveAttribute("type", "button");
+    expect(buttonElement).toHaveAttribute('type', 'button');
   });
 
   test("should render a button of type 'submit", () => {
@@ -42,29 +42,27 @@ describe("Button Component", () => {
     render(<Button label="Submit" type="submit" />);
 
     // Act.
-    const buttonElement = screen.getByRole("button");
+    const buttonElement = screen.getByRole('button');
 
     // Assert.
-    expect(buttonElement).toHaveAttribute("type", "submit");
+    expect(buttonElement).toHaveAttribute('type', 'submit');
   });
 
-  test("should render a full width button", () => {
+  test('should render a full width button', () => {
     // Arrange.
     render(<Button label="Submit" expanded />);
 
     // Act.
-    const buttonElement = screen.getByRole("button");
+    const buttonElement = screen.getByRole('button');
 
     // Assert.
-    expect(buttonElement).toHaveClass("w-full");
+    expect(buttonElement).toHaveClass('w-full');
   });
 
-  test("should render a button as a link", () => {
+  test('should render a button as a link', () => {
     // Arrange.
     // render(<Button label="Submit" href="/overview" />);
-
     // Act.
-
     // Assert.
     // const buttonAsLinkElement = screen.getByRole("link");
     // expect(buttonAsLinkElement).toHaveAttribute("href", "/");

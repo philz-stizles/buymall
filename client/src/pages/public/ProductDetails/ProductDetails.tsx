@@ -1,13 +1,11 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-
-// UI Components.
 import { useLocalQuery, useLocalMutation } from '../../../hooks';
 import { Product } from '../../../models/product';
-import { baseUrl } from '../../../utils/constants';
 import { Container } from '../../../components/shared';
 import RelatedProducts from './components/RelatedProducts/RelatedProducts';
 import SingleProduct from './components/SingleProduct/SingleProduct';
+import { Gallery, PageLoader } from '../../../components/ui';
 
 const ProductDetails = () => {
   const [star, setStar] = useState(0);
@@ -16,10 +14,10 @@ const ProductDetails = () => {
     data: product,
     isLoading,
     reload,
-  } = useLocalQuery<Product | null>(`${baseUrl}/products/${slug}`, null);
+  } = useLocalQuery<Product | null>(slug ? `/products/${slug}` : null, null);
   const { data: relatedProducts, isLoading: isLoadingRp } = useLocalQuery<
     Product[]
-  >(`${baseUrl}/products/${product?.id}/related`, []);
+  >(product ? `/products/${product?.id}/related` : null, []);
   const {
     isLoading: isLoadingSpr,
     error,
@@ -48,10 +46,27 @@ const ProductDetails = () => {
     setProductRating({ newRating, name });
   };
 
+  if (isLoading) {
+    return <PageLoader />;
+  }
+
   return (
-    <Container fluid>
-      <SingleProduct product={product!} onStarClick={onStarClick} star={star} />
-      <RelatedProducts products={relatedProducts} />
+    <Container>
+      <div className="px-4 py-10 sm:px-6 lg:px-8">
+        <div className="lg:grid lg:grid-cols-2 lg:items-start lg:gap-x-8">
+          {product?.images && <Gallery images={product.images} />}
+          <div className="mt-10 px-4 sm:mt-16 sm:px-0 lg:mt-0">
+            {/* <Info data={product} /> */}
+            <SingleProduct
+              product={product!}
+              onStarClick={onStarClick}
+              star={star}
+            />
+          </div>
+        </div>
+        <hr className="my-10" />
+        <RelatedProducts title="Related Products" items={relatedProducts} />
+      </div>
     </Container>
   );
 };

@@ -30,12 +30,12 @@ const MenuTreeItem = ({
 }: MenuTreeItemProps) => {
   const [showChildren, setShowChildren] = useState(false);
   const hasChildren = children && children.length > 0;
-  const className = `flex items-center gap-3 cursor-pointer text-sm text-slate-800 p-2 ${
-    isActive ? 'bg-indigo-100 text-indigo-600 rounded-md' : ''
+  const className = `flex items-center gap-3 cursor-pointer text-sm text-slate-800 p-2 font-medium ${
+    isActive ? 'bg-indigo-600 text-indigo-50 rounded-md' : ''
   }`;
   const itemContent = (
     <>
-      {Icon && <Icon className='text-indigo-600' size={18} />}
+      {Icon && <Icon className='text-indigo-600 p-1 bg-indigo-50 rounded-lg' size={28} />}
       {title}
       {hasChildren &&
         (showChildren ? <IoCaretDownSharp /> : <IoCaretForwardSharp />)}

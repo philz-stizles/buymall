@@ -55,7 +55,6 @@ const schema = new Schema<IProductDocument, IProductModel>(
     description: {
       type: String,
       required: true,
-      maxlength: 2000,
       text: true,
     },
     price: {

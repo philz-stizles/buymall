@@ -3,8 +3,10 @@ import Badge from '../Badge/Badge';
 import Avatar from '../Avatar/Avatar';
 import { useLocalMutation } from '../../../hooks';
 import { ChangeEvent } from 'react';
-import { IoFileTray } from 'react-icons/io5';
+import ClipLoader from 'react-spinners/ClipLoader';
 import { LuImagePlus } from 'react-icons/lu';
+import Loader from '../Loader/Loader';
+import { PulseLoader } from 'react-spinners';
 
 type UploadedImage = { public_id: string; url: string };
 
@@ -21,22 +23,28 @@ const FileUpload = ({
   setFiles,
   setIsLoading,
 }: Props) => {
-  const { mutate: uploadFile } = useLocalMutation('/products/upload-file', {
-    onSuccess: (data: any) => {
-      setIsLoading && setIsLoading(false);
-      console.log('IMAGE UPLOAD RES DATA', data);
-      setFiles([...files, data]);
-    },
-    onError: (error: any) => {
-      setIsLoading && setIsLoading(false);
-    },
-  });
+  const { mutate: uploadFile, isLoading: loadingUpload } = useLocalMutation(
+    '/products/upload-file',
+    {
+      onSuccess: (data: any) => {
+        setIsLoading && setIsLoading(false);
+        // console.log('IMAGE UPLOAD RES DATA', data);
+        setFiles([...files, data]);
+      },
+      onError: (error: any) => {
+        setIsLoading && setIsLoading(false);
+      },
+    }
+  );
 
-  const { mutate: removeFile } = useLocalMutation('/products/remove-file', {
-    onError: (error: any) => {
-      setIsLoading && setIsLoading(false);
-    },
-  });
+  const { mutate: removeFile, isLoading: loadingRemove } = useLocalMutation(
+    '/products/remove-file',
+    {
+      onError: (error: any) => {
+        setIsLoading && setIsLoading(false);
+      },
+    }
+  );
 
   const handleFileResizeAndUpload = async (
     e: ChangeEvent<HTMLInputElement>
@@ -49,7 +57,7 @@ const FileUpload = ({
       for (let i = 0; i < files.length; i++) {
         // Reduce file size.
         const uri = await resizeFile(files[i]);
-        console.log(uri);
+        // console.log(uri);
         // upload to cloudinary via server.
         await uploadFile({ image: uri });
       }
@@ -60,7 +68,6 @@ const FileUpload = ({
     setIsLoading && setIsLoading(true);
     await removeFile({ publicId });
     setIsLoading && setIsLoading(false);
-    console.log('IMAGE UPLOAD RES DATA', publicId);
     let filteredImages = files.filter((item) => {
       return item.public_id !== publicId;
     });
@@ -87,7 +94,12 @@ const FileUpload = ({
       </div>
 
       <label className="border inline-flex flex-row-reverse justify-center items-center self-start gap-1.5 border-slate-200 text-slate-600 shadow-sm rounded-lg p-2 text-sm font-medium cursor-pointer">
-        {title} <LuImagePlus size={18} />
+        {loadingUpload || loadingRemove ? (
+          <PulseLoader size={6} aria-label="Loading Spinner" />
+        ) : (
+          <span>{title}</span>
+        )}{' '}
+        <LuImagePlus size={18} />
         <input
           type="file"
           multiple

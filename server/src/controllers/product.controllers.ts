@@ -13,6 +13,7 @@ import { ApiResponse, catchAsync } from '@src/utils/api.utils';
 export const create = catchAsync(async (req: Request, res: Response) => {
   const newProduct = await ProductService.create({
     ...req.body,
+    price: parseFloat(req.body.price),
     vendor: req.vendor,
   });
   res.json(new ApiResponse('Created successfully', newProduct));
@@ -156,29 +157,28 @@ export const remove = catchAsync(
   }
 );
 
-export const read = async (req: Request, res: Response): Promise<void> => {
+export const read = catchAsync(async (req: Request, res: Response) => {
   const product = await Product.findOne({ slug: req.params.slug })
     .populate('category')
     .populate('subs')
     .exec();
-  res.json(product);
-};
 
-export const update = catchAsync(
-  async (req: Request, res: Response): Promise<void> => {
-    if (req.body.title) {
-      req.body.slug = slugify(req.body.title);
-    }
-    const updated = await Product.findOneAndUpdate(
-      { slug: req.params.slug },
-      req.body,
-      {
-        new: true,
-      }
-    ).exec();
-    res.json(updated);
+  res.json(new ApiResponse('Retrieved successfully', product));
+});
+
+export const update = catchAsync(async (req: Request, res: Response) => {
+  if (req.body.title) {
+    req.body.slug = slugify(req.body.title);
   }
-);
+  const updated = await Product.findOneAndUpdate(
+    { slug: req.params.slug },
+    req.body,
+    {
+      new: true,
+    }
+  ).exec();
+  res.json(updated);
+});
 
 // WITHOUT PAGINATION
 // export const list = async (req: Request, res: Response) => {
@@ -271,26 +271,29 @@ export const setProductRating = async (
   return res.json(ratingUpdated);
 };
 
-export const listRelatedProducts = async (req: Request, res: Response) => {
-  const targetProduct = await Product.findById(req.params.productId).exec();
-  if (!targetProduct) {
-    return res.status(404);
+export const listRelatedProducts = catchAsync(
+  async (req: Request, res: Response) => {
+    const targetProduct = await Product.findById(req.params.productId).exec();
+    if (!targetProduct) {
+      return res.status(404);
+    }
+
+    const { limit } = req.query as ProductQuery;
+
+    const relatedProducts = await Product.find({
+      _id: { $ne: targetProduct._id },
+      category: targetProduct.category,
+    })
+      .limit(+limit || 3)
+      .populate('category')
+      .populate('subs')
+      .populate('createdBy')
+      .populate('vendor')
+      .exec();
+
+    res.json(new ApiResponse('Retrieved successfully', relatedProducts));
   }
-
-  const { limit } = req.query as ProductQuery;
-
-  const relatedProducts = await Product.find({
-    _id: { $ne: targetProduct._id },
-    category: targetProduct.category,
-  })
-    .limit(+limit || 3)
-    .populate('category')
-    .populate('subs')
-    .populate('postedBy')
-    .exec();
-
-  return res.json(relatedProducts);
-};
+);
 
 // SEARCH / FILTER
 const handleQuery = async (req: Request, res: Response, query: string) => {
